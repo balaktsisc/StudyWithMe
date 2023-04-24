@@ -30,6 +30,7 @@ public class StudyRequest {
     /* Setters and Getters */
     public String getSubject() { return subject; }
     public void setSubject(String subject) { this.subject = subject; }
+    public String getReason() { return reason; }
     public void setReason(String reason) { this.reason = reason; }
     public String getPlace() { return place; }
     public void setPlace(String place) { this.place = place; }

@@ -37,6 +37,5 @@ public class User {
     public void setRequests(ArrayList<StudyRequest> requests) { this.requests = requests; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-
-
+    public String getName() { return firstName + " " + lastName; }
 }
