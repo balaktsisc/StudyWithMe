@@ -8,7 +8,9 @@ public class User {
     private String university, department;
     private ArrayList<StudyRequest> requests;
 
-    /* Main Constructor */
+    /* Constructors */
+    public User() { }
+
     public User(String username, String password, String email, String firstName, String lastName, String university, String department) {
         this.username = username;
         this.password = password;
