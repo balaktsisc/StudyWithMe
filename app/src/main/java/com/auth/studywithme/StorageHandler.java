@@ -9,6 +9,7 @@ import android.database.Cursor;
 
 import androidx.annotation.NonNull;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -131,15 +132,20 @@ public class StorageHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addMatch(@NonNull StudyRequest sr, @NonNull User u) {
+    public boolean addMatch(StudyRequest sr, User u) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(COL_UID,u.getId());
-        values.put(COL_RID,sr.getId());
-
-        db.insert(TABLE_REQUESTS,null, values);
-        db.close();
+        if(fetchMatchesOfStudyRequest(sr).size() < sr.getMaxMatches()) {
+            values.put(COL_UID, u.getId());
+            values.put(COL_RID, sr.getId());
+            db.insert(TABLE_MATCHES,null, values);
+            db.close();
+            return true;
+        } else {
+            db.close();
+            return false;
+        }
     }
 
     private User fetchUserById(int id) {
@@ -197,6 +203,45 @@ public class StorageHandler extends SQLiteOpenHelper {
         return u;
     }
 
+    public ArrayList<User> fetchAllUsers() {
+        String query = "SELECT " + COL_UID + " FROM " + TABLE_USERS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
+
+        ArrayList<User> users = new ArrayList<>();
+        try { while (cursor.moveToNext()) { users.add(fetchUserById(Integer.parseInt(cursor.getString(0)))); } }
+        finally { cursor.close(); }
+
+        db.close();
+        return users;
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public StudyRequest fetchStudyRequestsById(int id) {
+        String query = "SELECT * FROM " + TABLE_REQUESTS + " WHERE " +
+                COL_RID + " = '" + id + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
+        StudyRequest sr = new StudyRequest();
+        try {
+            if(cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            sr.setId(Integer.parseInt(cursor.getString(0)));
+            sr.setRequestedUser(fetchUserById(Integer.parseInt(cursor.getString(1))));
+            sr.setSubject(cursor.getString(2));
+            sr.setReason(cursor.getString(3));
+            sr.setPlace(cursor.getString(4));
+            sr.setComments(cursor.getString(5));
+            sr.setDatetime((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).parse(cursor.getString(6)));
+            sr.setPeriod(PeriodOfStudy.valueOf(cursor.getString(7)));
+            sr.setMaxMatches(Integer.parseInt(cursor.getString(8)));
+            sr.setMatchedUsers(fetchMatchesOfStudyRequest(sr));
+        } } catch (Exception ignored) { } finally { cursor.close(); }
+
+        db.close();
+        return sr;
+    }
+
     @SuppressLint("SimpleDateFormat")
     public ArrayList<StudyRequest> fetchStudyRequestsOfUser(User user) {
         String query = "SELECT * FROM " + TABLE_REQUESTS + " WHERE " +
@@ -220,21 +265,21 @@ public class StorageHandler extends SQLiteOpenHelper {
                 sr.setMatchedUsers(fetchMatchesOfStudyRequest(sr));
                 srs.add(sr);
             }
-        } catch (Exception e) { srs = null; } finally { cursor.close(); }
+        } catch (Exception ignored) { } finally { cursor.close(); }
 
         db.close();
         return srs;
     }
 
     public ArrayList<User> fetchMatchesOfStudyRequest(StudyRequest studyRequest) {
-        String query = "SELECT * FROM " + TABLE_MATCHES + " WHERE " +
+        String query = "SELECT " + COL_UID + " FROM " + TABLE_MATCHES + " WHERE " +
                 COL_RID + " = '" + studyRequest.getId() + "' AND " + COL_UID + " <> '" + studyRequest.getRequestedUser().getId() + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query,null);
 
         ArrayList<User> users = new ArrayList<>();
-        try { while (cursor.moveToNext()) { users.add(fetchUserById(Integer.parseInt(cursor.getString(2)))); } }
-        catch (Exception e) { users = null; } finally { cursor.close(); }
+        try { while (cursor.moveToNext()) { users.add(fetchUserById(Integer.parseInt(cursor.getString(0)))); } }
+        finally { cursor.close(); }
 
         db.close();
         return users;
