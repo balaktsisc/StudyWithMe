@@ -3,6 +3,7 @@ package com.auth.studywithme;
 import java.util.ArrayList;
 
 public class User {
+    private int id;
     private String username, email, password;
     private String firstName, lastName;
     private String university, department;
@@ -40,4 +41,6 @@ public class User {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getName() { return firstName + " " + lastName; }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 }

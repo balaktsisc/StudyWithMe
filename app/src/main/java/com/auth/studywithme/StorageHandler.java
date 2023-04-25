@@ -9,6 +9,9 @@ import android.database.Cursor;
 
 import androidx.annotation.NonNull;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
 
 public class StorageHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
@@ -37,8 +40,8 @@ public class StorageHandler extends SQLiteOpenHelper {
     public static final String COL_DEPARTMENT = "department";
 
     // Matched Users table
-    public static final String TABLE_MAT_USERS = "matchedUsers";
-    public static final String COL_MU_ID = "_muid";
+    public static final String TABLE_MATCHES = "matchedUsers";
+    public static final String COL_MUID = "_muid";
 
 
     // Constructor
@@ -50,8 +53,8 @@ public class StorageHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_STUDY_REQUESTS_TABLE = "CREATE TABLE " +
                 TABLE_REQUESTS + "(" +
-                COL_RID + " INTEGER PRIMARY KEY," +
-                COL_USERNAME + " TEXT," +
+                COL_RID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_UID + " TEXT," +
                 COL_SUBJECT + " TEXT," +
                 COL_REASON + " TEXT," +
                 COL_PLACE + " TEXT," +
@@ -62,7 +65,7 @@ public class StorageHandler extends SQLiteOpenHelper {
 
         String CREATE_USERS_TABLE = "CREATE TABLE " +
                 TABLE_USERS + "(" +
-                COL_UID + " INTEGER PRIMARY KEY," +
+                COL_UID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COL_USERNAME + " TEXT," +
                 COL_PASSWORD + " TEXT," +
                 COL_EMAIL + " TEXT," +
@@ -71,9 +74,9 @@ public class StorageHandler extends SQLiteOpenHelper {
                 COL_UNIVERSITY + " TEXT," +
                 COL_DEPARTMENT + " TEXT" + ")";
 
-        String CREATE_MAT_USERS_TABLE = "CREATE TABLE " +
-                TABLE_MAT_USERS + "(" +
-                COL_MU_ID + " INTEGER PRIMARY KEY," +
+        String CREATE_MATCHES_TABLE = "CREATE TABLE " +
+                TABLE_MATCHES + "(" +
+                COL_MUID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +
                 COL_RID + " INTEGER," +
                 COL_UID + " TEXT," +
                 "FOREIGN KEY " + "(" + COL_RID + ")" +
@@ -83,34 +86,15 @@ public class StorageHandler extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_STUDY_REQUESTS_TABLE);
         db.execSQL(CREATE_USERS_TABLE);
-        db.execSQL(CREATE_MAT_USERS_TABLE);
+        db.execSQL(CREATE_MATCHES_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REQUESTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MAT_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MATCHES);
         onCreate(db);
-    }
-
-
-    // Methods for updating records of tables of the DB
-    private int getIdFromQuery(String query) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        @SuppressLint("Recycle") Cursor cursor = db.rawQuery(query,null);
-        if (cursor.moveToFirst())
-            cursor.moveToFirst();
-        db.close();
-        return Integer.parseInt(cursor.getString(0));
-    }
-    public int getUid(String username) {
-        return getIdFromQuery("SELECT * FROM " + TABLE_USERS + " WHERE " +
-                COL_USERNAME + " = '" + username + "'");
-    }
-    public int getRid(String username, String time) {
-        return getIdFromQuery("SELECT * FROM " + TABLE_USERS + " WHERE " +
-                COL_USERNAME + " = '" + username + "' AND " + COL_TIME + " = '" + time + "'");
     }
 
     public void addUser(@NonNull User u) {
@@ -129,16 +113,17 @@ public class StorageHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    @SuppressLint("SimpleDateFormat")
     public void addStudyRequest(@NonNull StudyRequest sr, @NonNull User u) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(COL_USERNAME,u.getUsername());
+        values.put(COL_UID,u.getId());
         values.put(COL_SUBJECT, sr.getSubject());
         values.put(COL_REASON, sr.getReason());
         values.put(COL_PLACE, sr.getPlace());
         values.put(COL_COMMENTS, sr.getComments());
-        values.put(COL_TIME, sr.getTime().toString());
+        values.put(COL_TIME, (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
         values.put(COL_PERIOD, sr.getPeriod().name());
         values.put(COL_MAX, sr.getMaxMatches());
 
@@ -150,11 +135,109 @@ public class StorageHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(COL_UID,getUid(u.getUsername()));
-        values.put(COL_RID,getRid(u.getUsername(),sr.getTime().toString()));
+        values.put(COL_UID,u.getId());
+        values.put(COL_RID,sr.getId());
 
         db.insert(TABLE_REQUESTS,null, values);
         db.close();
+    }
+
+    private User fetchUserById(int id) {
+        String query = "SELECT * FROM " + TABLE_USERS + " WHERE " +
+                COL_UID + " = '" + id + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
+
+        User u = new User();
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            u.setId(Integer.parseInt(cursor.getString(0)));
+            u.setUsername(cursor.getString(1));
+            u.setPassword(cursor.getString(2));
+            u.setEmail(cursor.getString(3));
+            u.setFirstName(cursor.getString(4));
+            u.setLastName(cursor.getString(5));
+            u.setUniversity(cursor.getString(6));
+            u.setDepartment(cursor.getString(7));
+            u.setRequests(fetchStudyRequestsOfUser(u));
+            cursor.close();
+        } else {
+            u = null;
+        }
+        db.close();
+
+        return u;
+    }
+
+    /* To be used for the authentication process */
+    public User fetchUserByCredentials(String username) {
+        String query = "SELECT * FROM " + TABLE_USERS + " WHERE " +
+                COL_USERNAME + " = '" + username + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
+
+        User u = new User();
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            u.setId(Integer.parseInt(cursor.getString(0)));
+            u.setUsername(cursor.getString(1));
+            u.setPassword(cursor.getString(2));
+            u.setEmail(cursor.getString(3));
+            u.setFirstName(cursor.getString(4));
+            u.setLastName(cursor.getString(5));
+            u.setUniversity(cursor.getString(6));
+            u.setDepartment(cursor.getString(7));
+            u.setRequests(fetchStudyRequestsOfUser(u));
+            cursor.close();
+        } else {
+            u = null;
+        }
+        db.close();
+
+        return u;
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public ArrayList<StudyRequest> fetchStudyRequestsOfUser(User user) {
+        String query = "SELECT * FROM " + TABLE_REQUESTS + " WHERE " +
+                COL_UID + " = '" + user.getId() + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
+
+        ArrayList<StudyRequest> srs = new ArrayList<>();
+        try {
+            StudyRequest sr = new StudyRequest();
+            while (cursor.moveToNext()) {
+                sr.setId(Integer.parseInt(cursor.getString(0)));
+                sr.setRequestedUser(user);
+                sr.setSubject(cursor.getString(2));
+                sr.setReason(cursor.getString(3));
+                sr.setPlace(cursor.getString(4));
+                sr.setComments(cursor.getString(5));
+                sr.setDatetime((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).parse(cursor.getString(6)));
+                sr.setPeriod(PeriodOfStudy.valueOf(cursor.getString(7)));
+                sr.setMaxMatches(Integer.parseInt(cursor.getString(8)));
+                sr.setMatchedUsers(fetchMatchesOfStudyRequest(sr));
+                srs.add(sr);
+            }
+        } catch (Exception e) { srs = null; } finally { cursor.close(); }
+
+        db.close();
+        return srs;
+    }
+
+    public ArrayList<User> fetchMatchesOfStudyRequest(StudyRequest studyRequest) {
+        String query = "SELECT * FROM " + TABLE_MATCHES + " WHERE " +
+                COL_RID + " = '" + studyRequest.getId() + "' AND " + COL_UID + " <> '" + studyRequest.getRequestedUser().getId() + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
+
+        ArrayList<User> users = new ArrayList<>();
+        try { while (cursor.moveToNext()) { users.add(fetchUserById(Integer.parseInt(cursor.getString(2)))); } }
+        catch (Exception e) { users = null; } finally { cursor.close(); }
+
+        db.close();
+        return users;
     }
 
 }
