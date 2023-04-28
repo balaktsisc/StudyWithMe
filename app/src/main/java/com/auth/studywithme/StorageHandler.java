@@ -98,7 +98,7 @@ public class StorageHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addUser(@NonNull User u) {
+    public boolean addUser(@NonNull User u) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -110,8 +110,14 @@ public class StorageHandler extends SQLiteOpenHelper {
         values.put(COL_UNIVERSITY, u.getUniversity());
         values.put(COL_DEPARTMENT, u.getDepartment());
 
-        db.insert(TABLE_USERS,null, values);
+        // Inserting Row
+        long result = db.insert(TABLE_USERS,null, values);
+
+        // Closing database connection
         db.close();
+
+        // Return true if the user was added successfully
+        return result != -1 ;
     }
 
     @SuppressLint("SimpleDateFormat")
