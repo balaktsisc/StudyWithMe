@@ -25,7 +25,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        StrictMode.enableDefaults();
+
         // Get data from SignUp form
         firstNameEditText = findViewById(R.id.firstNameEditText);
         lastNameEditText = findViewById(R.id.lastNameEditText);
@@ -54,7 +54,6 @@ public class SignUpActivity extends AppCompatActivity {
         // Create a new user object with the form input data
         User user = new User(firstName,lastName,username,password,email,university,department);
 
-
         try (StorageHandler storageHandler = new StorageHandler(this, null, 1)) {
             // Add user to database
             boolean success = storageHandler.addUser(user);
@@ -62,6 +61,7 @@ public class SignUpActivity extends AppCompatActivity {
             // Show toast message based on success of adding user
             if (success) {
                 Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+                this.finish();
             } else {
                 Toast.makeText(this, "Account failed to be created", Toast.LENGTH_SHORT).show();
             }
