@@ -114,21 +114,17 @@ public class StorageHandler extends SQLiteOpenHelper {
         boolean flag = true;
         for(String v : values.keySet()) { if (values.get(v).equals("") || values.get(v) == null) flag = false; }
 
-        if (flag) {
-            // Inserting Row
-            result = db.insert(TABLE_USERS, null, values);
-            System.out.println(result);
-        }
+        if (flag) result = db.insert(TABLE_USERS, null, values);
         db.close();
 
-        // Return true if the user was added successfully
         return result != -1 ;
     }
 
     @SuppressLint("SimpleDateFormat")
-    public void addStudyRequest(@NonNull StudyRequest sr, @NonNull User u) {
+    public boolean addStudyRequest(@NonNull StudyRequest sr, @NonNull User u) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        long result = -1;
 
         values.put(COL_UID,u.getId());
         values.put(COL_SUBJECT, sr.getSubject());
@@ -139,8 +135,13 @@ public class StorageHandler extends SQLiteOpenHelper {
         values.put(COL_PERIOD, sr.getPeriod().name());
         values.put(COL_MAX, sr.getMaxMatches());
 
-        db.insert(TABLE_REQUESTS,null, values);
+        boolean flag = true;
+        for(String v : values.keySet()) { if (values.get(v).equals("") || values.get(v) == null) flag = false; }
+
+        if (flag) result = db.insert(TABLE_REQUESTS,null, values);
         db.close();
+
+        return result != -1;
     }
 
     public boolean addMatch(StudyRequest sr, User u) {
