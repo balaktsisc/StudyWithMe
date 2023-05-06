@@ -52,7 +52,7 @@ public class StorageHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_STUDY_REQUESTS_TABLE = "CREATE TABLE " +
+      String CREATE_STUDY_REQUESTS_TABLE = "CREATE TABLE " +
                 TABLE_REQUESTS + "(" +
                 COL_RID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COL_UID + " TEXT," +
@@ -98,9 +98,10 @@ public class StorageHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean addUser(@NonNull User u) {
+    public boolean addUser(User u) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        long result = -1;
 
         values.put(COL_USERNAME, u.getUsername());
         values.put(COL_PASSWORD, u.getPassword());
@@ -110,10 +111,14 @@ public class StorageHandler extends SQLiteOpenHelper {
         values.put(COL_UNIVERSITY, u.getUniversity());
         values.put(COL_DEPARTMENT, u.getDepartment());
 
-        // Inserting Row
-        long result = db.insert(TABLE_USERS,null, values);
+        boolean flag = true;
+        for(String v : values.keySet()) { if (values.get(v).equals("") || values.get(v) == null) flag = false; }
 
-        // Closing database connection
+        if (flag) {
+            // Inserting Row
+            result = db.insert(TABLE_USERS, null, values);
+            System.out.println(result);
+        }
         db.close();
 
         // Return true if the user was added successfully
