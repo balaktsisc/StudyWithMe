@@ -9,9 +9,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fac53c20-034f-4123-92d3-ef4ce552e110" name="Changes" comment="Initialized project">
+    <list default="true" id="fac53c20-034f-4123-92d3-ef4ce552e110" name="Changes" comment="Added methods on DBMS">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/data_extraction_rules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/xml/data_extraction_rules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/auth/studywithme/StorageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/auth/studywithme/StorageHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +36,14 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -48,6 +56,9 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2OTM0KrvLNxdR9jJkkeexxUj9EI" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -57,12 +68,13 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cidr.known.project.marker": "true",
     "last_opened_file_path": "D:/Projects/Android/StudyWithMe",
     "project.structure.last.edited": "Build Variants",
     "project.structure.proportion": "0.17",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+    "settings.editor.selected.configurable": "editor.preferences.appearance"
   }
 }]]></component>
   <component name="PsdUISettings">
@@ -71,6 +83,9 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Projects\Android\StudyWithMe\.idea" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.auth.studywithme" />
     </key>
   </component>
   <component name="RunManager">
@@ -147,7 +162,42 @@
       <option name="project" value="LOCAL" />
       <updated>1681581429428</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Removed Main Activity">
+      <created>1682356927907</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1682356927907</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Initialized User and StudyRequest classes">
+      <created>1682362836260</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1682362836260</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Defined database schema">
+      <created>1682366173610</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1682366173610</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Semi-implemented some methods on dbms">
+      <created>1682380362850</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1682380362850</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added methods on DBMS">
+      <created>1682427061627</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1682427061627</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -155,7 +205,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="Login_SignUp" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -163,6 +225,11 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initialized project" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initialized project" />
+    <MESSAGE value="Removed Main Activity" />
+    <MESSAGE value="Initialized User and StudyRequest classes" />
+    <MESSAGE value="Defined database schema" />
+    <MESSAGE value="Semi-implemented some methods on dbms" />
+    <MESSAGE value="Added methods on DBMS" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added methods on DBMS" />
   </component>
 </project>
