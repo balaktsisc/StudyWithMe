@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 
@@ -69,9 +70,9 @@ public class StorageHandler extends SQLiteOpenHelper {
                 COL_UID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COL_USERNAME + " TEXT," +
                 COL_PASSWORD + " TEXT," +
-                COL_EMAIL + " TEXT," +
                 COL_FIRSTNAME + " TEXT,"+
                 COL_LASTNAME + " TEXT," +
+                COL_EMAIL + " TEXT," +
                 COL_UNIVERSITY + " TEXT," +
                 COL_DEPARTMENT + " TEXT" + ")";
 
