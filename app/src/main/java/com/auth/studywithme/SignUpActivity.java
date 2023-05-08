@@ -24,6 +24,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText emailEditText;
     EditText universityEditText;
     EditText departmentEditText;
+    StorageHandler storageHandler;
     static boolean[] flags = new boolean[3];
 
     @Override
@@ -41,6 +42,8 @@ public class SignUpActivity extends AppCompatActivity {
         departmentEditText = findViewById(R.id.departmentEditText);
         Button signUpButton = findViewById(R.id.signUpButton);
         signUpButton.setEnabled(false);
+
+        storageHandler = new StorageHandler(this,null,1);
 
         // Check if inserted account details are suitable
         try (StorageHandler storageHandler = new StorageHandler(this, null, 1)) {

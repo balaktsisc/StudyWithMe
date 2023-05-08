@@ -48,7 +48,7 @@ public class StorageHandler extends SQLiteOpenHelper {
 
     // Constructor
     public StorageHandler(Context context, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+        super(context, DATABASE_NAME, factory, version);
     }
 
     @Override
@@ -106,9 +106,9 @@ public class StorageHandler extends SQLiteOpenHelper {
 
         values.put(COL_USERNAME, u.getUsername());
         values.put(COL_PASSWORD, u.getPassword());
-        values.put(COL_EMAIL, u.getEmail());
         values.put(COL_FIRSTNAME, u.getFirstName());
         values.put(COL_LASTNAME, u.getLastName());
+        values.put(COL_EMAIL, u.getEmail());
         values.put(COL_UNIVERSITY, u.getUniversity());
         values.put(COL_DEPARTMENT, u.getDepartment());
 
