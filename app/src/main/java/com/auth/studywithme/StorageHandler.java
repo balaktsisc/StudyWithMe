@@ -216,6 +216,35 @@ public class StorageHandler extends SQLiteOpenHelper {
         return u;
     }
 
+    public User fetchUserByCredentials(String username, String password) {
+        String query = "SELECT * FROM " + TABLE_USERS + " WHERE " +
+                COL_USERNAME + " = '" + username + "' AND " +
+                COL_PASSWORD + " = '" + password + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
+
+        User u = new User();
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            u.setId(Integer.parseInt(cursor.getString(0)));
+            u.setUsername(cursor.getString(1));
+            u.setPassword(cursor.getString(2));
+            u.setEmail(cursor.getString(3));
+            u.setFirstName(cursor.getString(4));
+            u.setLastName(cursor.getString(5));
+            u.setUniversity(cursor.getString(6));
+            u.setDepartment(cursor.getString(7));
+            u.setRequests(fetchStudyRequestsOfUser(u));
+            cursor.close();
+        } else {
+            u = null;
+        }
+        db.close();
+
+        return u;
+    }
+
+
     public ArrayList<User> fetchAllUsers() {
         String query = "SELECT " + COL_UID + " FROM " + TABLE_USERS;
         SQLiteDatabase db = this.getReadableDatabase();

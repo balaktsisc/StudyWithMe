@@ -113,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity {
         String department = departmentEditText.getText().toString();
 
         // Create a new user object with the form input data
-        User user = new User(firstName,lastName,username,password,email,university,department);
+        User user = new User(username,password,email,firstName,lastName,university,department);
         TryActivateSigningButton();
 
         try (StorageHandler storageHandler = new StorageHandler(this, null, 1)) {
