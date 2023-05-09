@@ -1,5 +1,7 @@
 package com.auth.studywithme;
 
-public enum PeriodOfStudy {
+import java.io.Serializable;
+
+public enum PeriodOfStudy implements Serializable {
     once, twice, sometimes, one_week, two_weeks, semester, other
 }

@@ -173,9 +173,9 @@ public class StorageHandler extends SQLiteOpenHelper {
             u.setId(Integer.parseInt(cursor.getString(0)));
             u.setUsername(cursor.getString(1));
             u.setPassword(cursor.getString(2));
-            u.setEmail(cursor.getString(3));
-            u.setFirstName(cursor.getString(4));
-            u.setLastName(cursor.getString(5));
+            u.setFirstName(cursor.getString(3));
+            u.setLastName(cursor.getString(4));
+            u.setEmail(cursor.getString(5));
             u.setUniversity(cursor.getString(6));
             u.setDepartment(cursor.getString(7));
             u.setRequests(fetchStudyRequestsOfUser(u));
@@ -201,9 +201,9 @@ public class StorageHandler extends SQLiteOpenHelper {
             u.setId(Integer.parseInt(cursor.getString(0)));
             u.setUsername(cursor.getString(1));
             u.setPassword(cursor.getString(2));
-            u.setEmail(cursor.getString(3));
-            u.setFirstName(cursor.getString(4));
-            u.setLastName(cursor.getString(5));
+            u.setFirstName(cursor.getString(3));
+            u.setLastName(cursor.getString(4));
+            u.setEmail(cursor.getString(5));
             u.setUniversity(cursor.getString(6));
             u.setDepartment(cursor.getString(7));
             u.setRequests(fetchStudyRequestsOfUser(u));
@@ -229,9 +229,9 @@ public class StorageHandler extends SQLiteOpenHelper {
             u.setId(Integer.parseInt(cursor.getString(0)));
             u.setUsername(cursor.getString(1));
             u.setPassword(cursor.getString(2));
-            u.setEmail(cursor.getString(3));
-            u.setFirstName(cursor.getString(4));
-            u.setLastName(cursor.getString(5));
+            u.setFirstName(cursor.getString(3));
+            u.setLastName(cursor.getString(4));
+            u.setEmail(cursor.getString(5));
             u.setUniversity(cursor.getString(6));
             u.setDepartment(cursor.getString(7));
             u.setRequests(fetchStudyRequestsOfUser(u));

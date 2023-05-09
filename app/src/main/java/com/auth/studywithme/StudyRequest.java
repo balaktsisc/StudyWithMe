@@ -1,9 +1,10 @@
 package com.auth.studywithme;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class StudyRequest {
+public class StudyRequest  implements Serializable {
     private int id;
     private String subject, reason, place, comments;
     private ArrayList<User> matchedUsers;
@@ -15,13 +16,12 @@ public class StudyRequest {
     /* Constructors */
     public StudyRequest() { }
 
-    public StudyRequest(String subject, String reason, String place, String comments, User requestedUser, ArrayList<User> matchedUsers, Date datetime, PeriodOfStudy period, int maxMatches) {
+    public StudyRequest(String subject, String reason, String place, String comments, Date datetime, PeriodOfStudy period, int maxMatches) {
         this.subject = subject;
         this.reason = reason;
         this.place = place;
         this.comments = comments;
-        this.requestedUser = requestedUser;
-        this.matchedUsers = matchedUsers;
+        this.matchedUsers = new ArrayList<>();
         this.datetime = datetime;
         this.period = period;
         this.maxMatches = maxMatches;

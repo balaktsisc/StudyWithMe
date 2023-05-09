@@ -1,5 +1,6 @@
 package com.auth.studywithme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,17 +10,15 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
-
-    private EditText usernameEditText;
-    private EditText passwordEditText;
-    private StorageHandler storageHandler;
-
+    EditText usernameEditText;
+    EditText passwordEditText;
+    StorageHandler storageHandler;
+    User loggedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,37 +49,32 @@ public class LoginActivity extends AppCompatActivity {
 
         textView.setText(spannableString);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
-
-        Button loginButton = findViewById(R.id.loginButton);
-
     }
-        public void onBtnClick (View v){
-            // Get the username and password entered by the user
-            String username = usernameEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
 
-            // Check if the username and password are correct
-            if (isValidCredentials(username, password)) {
-                // Show a success message
-                Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
+    public void LoginClicked (View v){
+        // Get the username and password entered by the user
+        String username = usernameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
 
-                // Switch to the new activity for creating a study request
-                //Intent intent = new Intent(LoginActivity.this, CreateStudyRequestActivity.class);
-                //startActivity(intent);
-            } else {
-                // Show an error message
-                Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
-            }
+        // Check if the username and password are correct
+        loggedUser = authenticateUser(username, password);
+        if (loggedUser != null) {
+            // Show a success message
+            Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
+
+            // Switch to the new activity for creating a study request
+            Intent intent = new Intent(LoginActivity.this, UserDashboard.class);
+            intent.putExtra("loggedUser",loggedUser);
+            startActivity(intent);
+        } else {
+            // Show an error message
+            Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
         }
+    }
 
         // Check if the username and password are valid
-        private boolean isValidCredentials (String username, String password){
-            // Search database for user with specified username and password
-            User user = storageHandler.fetchUserByCredentials(username, password);
-            return user!=null;
-        }
-
-
-
-
+    private User authenticateUser(String username, String password){
+        // Search database for user with specified username and password
+        return storageHandler.fetchUserByCredentials(username, password);
+    }
 }
