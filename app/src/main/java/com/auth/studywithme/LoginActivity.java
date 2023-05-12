@@ -1,6 +1,5 @@
 package com.auth.studywithme;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -69,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             storageHandler.addStudyRequest(sr,loggedUser);
 
             // Switch to the new activity for creating a study request
-            Intent intent = new Intent(LoginActivity.this, UserDashboard.class);
+            Intent intent = new Intent(LoginActivity.this, Dashboard.class);
             intent.putExtra("loggedUser",loggedUser);
             startActivity(intent);
         } else {
