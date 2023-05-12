@@ -8,4 +8,11 @@
     <string name="email">Email</string>
     <string name="university">University</string>
     <string name="department">Department</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="subject">Subject</string>
+    <string name="reason">Reason</string>
+    <string name="dd_mm_yyyy_hh_mm">dd/mm/yyyy hh:mm</string>
+    <string name="log_in">Log In</string>
+    <string name="not_a_member_sign_up_now">Not a member? Sign up now</string>
+    <string name="login">Login</string>
 </resources>

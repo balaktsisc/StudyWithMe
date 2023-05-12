@@ -22,7 +22,9 @@
         <activity
             android:name=".SignUpActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".UserDashboard"
+            android:exported="false" />
     </application>
 
 </manifest>
