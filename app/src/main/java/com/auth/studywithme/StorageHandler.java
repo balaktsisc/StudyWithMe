@@ -56,7 +56,7 @@ public class StorageHandler extends SQLiteOpenHelper {
       String CREATE_STUDY_REQUESTS_TABLE = "CREATE TABLE " +
                 TABLE_REQUESTS + "(" +
                 COL_RID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_UID + " TEXT," +
+                COL_UID + " INTEGER," +
                 COL_SUBJECT + " TEXT," +
                 COL_REASON + " TEXT," +
                 COL_PLACE + " TEXT," +
@@ -113,7 +113,7 @@ public class StorageHandler extends SQLiteOpenHelper {
         values.put(COL_DEPARTMENT, u.getDepartment());
 
         boolean flag = true;
-        for(String v : values.keySet()) { if (values.get(v).equals("") || values.get(v) == null) flag = false; }
+        for(String v : values.keySet()) { if (values.get(v) == null || values.get(v).equals("")) flag = false; }
 
         if (flag) result = db.insert(TABLE_USERS, null, values);
         db.close();
@@ -122,10 +122,13 @@ public class StorageHandler extends SQLiteOpenHelper {
     }
 
     @SuppressLint("SimpleDateFormat")
-    public boolean addStudyRequest(@NonNull StudyRequest sr, @NonNull User u) {
+    public boolean addStudyRequest( StudyRequest sr, User u) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         long result = -1;
+
+        System.out.println(sr);
+        System.out.println(u);
 
         values.put(COL_UID,u.getId());
         values.put(COL_SUBJECT, sr.getSubject());
@@ -137,7 +140,7 @@ public class StorageHandler extends SQLiteOpenHelper {
         values.put(COL_MAX, sr.getMaxMatches());
 
         boolean flag = true;
-        for(String v : values.keySet()) { if (values.get(v).equals("") || values.get(v) == null) flag = false; }
+        for(String v : values.keySet()) { if (values.get(v) == null || (values.get(v).equals("") && !v.equals("comments") )) flag = false; }
 
         if (flag) result = db.insert(TABLE_REQUESTS,null, values);
         db.close();

@@ -13,7 +13,7 @@ public class UserDashboard extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder> adapter;
     User loggedUser;
-    StorageHandler storageHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +25,6 @@ public class UserDashboard extends AppCompatActivity {
             loggedUser = (User) extras.getSerializable("loggedUser");
         else
             loggedUser = new User();
-
-        storageHandler = new StorageHandler(this,null,1);
-
-        StudyRequest sr = new StudyRequest("Algorithms", "Test", "Central Library","", new Date(),PeriodOfStudy.once,4);
-        storageHandler.addStudyRequest(sr,loggedUser);
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
