@@ -15,4 +15,10 @@
     <string name="log_in">Log In</string>
     <string name="not_a_member_sign_up_now">Not a member? Sign up now</string>
     <string name="login">Login</string>
+    <string name="plus">+</string>
+    <string name="create_new_study_request">Create new Study Request</string>
+    <string name="add_request">Add Request</string>
+    <string name="profile">Profile</string>
+    <string name="account">Account</string>
+    <string name="settings">Settings</string>
 </resources>
