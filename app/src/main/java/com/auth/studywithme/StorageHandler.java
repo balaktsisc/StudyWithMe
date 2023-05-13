@@ -6,11 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.Build;
 
-import androidx.annotation.NonNull;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -121,8 +117,39 @@ public class StorageHandler extends SQLiteOpenHelper {
         return result != -1 ;
     }
 
+    public boolean updateUser(int ouId, User nu) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        long result = 0;
+
+        values.put(COL_USERNAME, nu.getUsername());
+        values.put(COL_PASSWORD, nu.getPassword());
+        values.put(COL_FIRSTNAME, nu.getFirstName());
+        values.put(COL_LASTNAME, nu.getLastName());
+        values.put(COL_EMAIL, nu.getEmail());
+        values.put(COL_UNIVERSITY, nu.getUniversity());
+        values.put(COL_DEPARTMENT, nu.getDepartment());
+
+        boolean flag = true;
+        for(String v : values.keySet()) { if (values.get(v) == null || values.get(v).equals("")) flag = false; }
+
+        if (flag) result = db.update(TABLE_USERS, values,COL_UID + " = ?", new String[] { String.valueOf(ouId) });
+        db.close();
+
+        return result > 0 ;
+    }
+
+    public boolean deleteUser(String username) {
+        User u = fetchUserByUsername(username);
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_USERS, COL_UID + " = ?",
+                new String[] { String.valueOf(u.getId()) });
+        db.close();
+        return result > 0;
+    }
+
     @SuppressLint("SimpleDateFormat")
-    public boolean addStudyRequest( StudyRequest sr, User u) {
+    public boolean addStudyRequest(StudyRequest sr, User u) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         long result = -1;
@@ -192,7 +219,7 @@ public class StorageHandler extends SQLiteOpenHelper {
     }
 
     /* To be used for the authentication process */
-    public User fetchUserByCredentials(String username) {
+    public User fetchUserByUsername(String username) {
         String query = "SELECT * FROM " + TABLE_USERS + " WHERE " +
                 COL_USERNAME + " = '" + username + "'";
         SQLiteDatabase db = this.getReadableDatabase();

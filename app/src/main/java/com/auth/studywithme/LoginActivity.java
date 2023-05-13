@@ -64,13 +64,14 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
 
 //            For debugging purpose
-            StudyRequest sr = new StudyRequest("Algorithms", "Test", "Central Library","o", new Date(),PeriodOfStudy.once,4);
-            storageHandler.addStudyRequest(sr,loggedUser);
+//            StudyRequest sr = new StudyRequest("Algorithms", "Test", "Central Library","o", new Date(),PeriodOfStudy.once,4);
+//            storageHandler.addStudyRequest(sr,loggedUser);
 
             // Switch to the new activity for creating a study request
             Intent intent = new Intent(LoginActivity.this, Dashboard.class);
             intent.putExtra("loggedUser",loggedUser);
             startActivity(intent);
+            finish();
         } else {
             // Show an error message
             Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();

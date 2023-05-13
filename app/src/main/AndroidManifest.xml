@@ -23,7 +23,10 @@
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".UserDashboard"
+            android:name=".Dashboard"
+            android:exported="false" />
+        <activity
+            android:name=".AccountActivity"
             android:exported="false" />
     </application>
 
