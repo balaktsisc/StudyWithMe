@@ -27,7 +27,7 @@
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".Dashboard"
+            android:name=".DashboardActivity"
             android:exported="false" />
         <activity
             android:name=".AccountActivity"

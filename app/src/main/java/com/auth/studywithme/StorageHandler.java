@@ -323,8 +323,8 @@ public class StorageHandler extends SQLiteOpenHelper {
 
         ArrayList<StudyRequest> srs = new ArrayList<>();
         try {
-            StudyRequest sr = new StudyRequest();
             while (cursor.moveToNext()) {
+                StudyRequest sr = new StudyRequest();
                 sr.setId(Integer.parseInt(cursor.getString(0)));
                 sr.setRequestedUser(user);
                 sr.setSubject(cursor.getString(2));
