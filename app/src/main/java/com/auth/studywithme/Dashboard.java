@@ -52,9 +52,9 @@ public class Dashboard extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_request) {
-           // Intent intent = new Intent(this, REPLACE-WITH-NEW-REQUEST-ACTIVITY.class);
-           // intent.putExtra("loggedUser",loggedUser);
-           //  activityResultLauncher.launch(intent);
+            Intent intent = new Intent(this, StudyRequestActivity.class);
+            intent.putExtra("loggedUser",loggedUser);
+            activityResultLauncher.launch(intent);
 
             item.setChecked(!item.isChecked());
             return true;
