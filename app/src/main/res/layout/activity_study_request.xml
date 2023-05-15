@@ -22,7 +22,7 @@ tools:context=".StudyRequestActivity">
 <EditText
     android:id="@+id/et_subject"
     android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_height="48dp"
     android:hint="Subject"
     android:inputType="text"
     android:maxLines="1"
@@ -35,7 +35,7 @@ tools:context=".StudyRequestActivity">
 <EditText
     android:id="@+id/et_reason"
     android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_height="48dp"
     android:hint="Reason"
     android:inputType="text"
     android:maxLines="1"
@@ -48,7 +48,7 @@ tools:context=".StudyRequestActivity">
 <EditText
     android:id="@+id/et_place"
     android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_height="48dp"
     android:hint="Place"
     android:inputType="text"
     android:maxLines="1"
