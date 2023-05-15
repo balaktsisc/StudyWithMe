@@ -12,6 +12,9 @@
         android:theme="@style/Theme.StudyWithMe"
         tools:targetApi="31">
         <activity
+            android:name=".UpdateStudyRequestActivity"
+            android:exported="false" />
+        <activity
             android:name=".StudyRequestActivity"
             android:exported="false" />
         <activity

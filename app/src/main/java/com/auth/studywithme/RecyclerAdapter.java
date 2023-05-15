@@ -1,7 +1,9 @@
 package com.auth.studywithme;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +26,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         TextView reason;
         TextView date;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, ArrayList<StudyRequest> studyRequests) {
             super(itemView);
             subject = itemView.findViewById(R.id.subject);
             reason = itemView.findViewById(R.id.reason);
@@ -32,9 +34,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
+                StudyRequest studyRequest = studyRequests.get(position);
 
-                Snackbar.make(v, "Click detected on item " + position,
-                        Snackbar.LENGTH_LONG).show();
+                // Start the UpdateStudyRequestActivity and pass the selected study request
+                Intent intent = new Intent(itemView.getContext(), UpdateStudyRequestActivity.class);
+                intent.putExtra("studyRequest", studyRequest);
+                itemView.getContext().startActivity(intent);
+
+//                Snackbar.make(v, "Click detected on item " + position,
+//                        Snackbar.LENGTH_LONG).show();
             });
         }
     }
@@ -52,7 +60,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_study_request, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(v, studyRequests);
     }
 
     @SuppressLint("SimpleDateFormat")

@@ -175,6 +175,42 @@ public class StorageHandler extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    public boolean updateStudyRequest(StudyRequest sr) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        long result = 0;
+
+        values.put(COL_SUBJECT, sr.getSubject());
+        values.put(COL_REASON, sr.getReason());
+        values.put(COL_PLACE, sr.getPlace());
+        values.put(COL_COMMENTS, sr.getComments());
+        values.put(COL_TIME, (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
+        values.put(COL_PERIOD, sr.getPeriod().name());
+        values.put(COL_MAX, sr.getMaxMatches());
+
+        boolean flag = true;
+        for (String v : values.keySet()) {
+            if (values.get(v) == null || (values.get(v).equals("") && !v.equals(COL_COMMENTS)))
+                flag = false;
+        }
+
+        if (flag) {
+            result = db.update(TABLE_REQUESTS, values, COL_RID + " = ?", new String[]{String.valueOf(sr.getId())});
+        }
+        db.close();
+
+        return result > 0;
+    }
+
+    public boolean deleteStudyRequest(StudyRequest sr) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_REQUESTS, COL_RID + " = ?",
+                new String[]{String.valueOf(sr.getId())});
+        db.close();
+        return result > 0;
+    }
+
+
     public boolean addMatch(StudyRequest sr, User u) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
