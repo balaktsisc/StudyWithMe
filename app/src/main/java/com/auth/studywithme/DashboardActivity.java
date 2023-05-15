@@ -19,6 +19,8 @@ public class DashboardActivity extends AppCompatActivity {
 
     static int CREATED_REQUEST = 100;
     static int DELETED_ACCOUNT = 101;
+    static int UPDATED_REQUEST = 102;
+    static int DELETED_REQUEST = 103;
 
 
     @Override
@@ -72,6 +74,10 @@ public class DashboardActivity extends AppCompatActivity {
                     startActivity(new Intent(this,LoginActivity.class));
                     finish();
                 } else if (result.getResultCode() == CREATED_REQUEST) {
+                    recreate();
+                } else if(result.getResultCode() == UPDATED_REQUEST) {
+                    recreate();
+                } else if(result.getResultCode() == DELETED_REQUEST){
                     recreate();
                 }
             });

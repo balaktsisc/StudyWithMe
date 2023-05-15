@@ -13,10 +13,6 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
     private EditText subjectEditText;
     private EditText reasonEditText;
     private EditText placeEditText;
-    private Button btnUpdate;
-    private Button btnDelete;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +27,6 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         subjectEditText = findViewById(R.id.et_subject);
         reasonEditText = findViewById(R.id.et_reason);
         placeEditText = findViewById(R.id.et_place);
-        btnUpdate = findViewById(R.id.btn_update);
-        btnDelete = findViewById(R.id.btn_delete);
-
 
         // Pre-fill the form fields with the current values of the study request
         subjectEditText.setText(studyRequest.getSubject());
@@ -58,19 +51,19 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         }
 
         // Finish the activity and return to the dashboard
-        setResult(100);
+        setResult(102);
         finish();
     }
 
 
     public void deleteStudyRequest(View view) {
-        // Delete the study request from the database (implement this method in StorageHandler)
+        // Delete the study request from the database
         try (StorageHandler sh = new StorageHandler(this, null, 1)) {
             sh.deleteStudyRequest(studyRequest);
         }
 
         // Finish the activity and return to the dashboard
-        setResult(100);
+        setResult(103);
         finish();
     }
 
