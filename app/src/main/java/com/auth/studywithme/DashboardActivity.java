@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class DashboardActivity extends AppCompatActivity implements RecyclerAdapter.IStudyRequerstRecycler {
+public class DashboardActivity extends AppCompatActivity implements RecyclerAdapter.ISStudyRequestRecycler {
     RecyclerView recyclerView;
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder> adapter;
     User loggedUser;

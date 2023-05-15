@@ -1,9 +1,7 @@
 package com.auth.studywithme;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +19,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     User user;
     ArrayList<StudyRequest> studyRequests;
 
-    IStudyRequerstRecycler srListener;
+    ISStudyRequestRecycler srListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView subject;
         TextView reason;
         TextView date;
-        IStudyRequerstRecycler srListener;
+        ISStudyRequestRecycler srListener;
 
-        public ViewHolder(View itemView, ArrayList<StudyRequest> studyRequests, IStudyRequerstRecycler srListener) {
+        public ViewHolder(View itemView, ArrayList<StudyRequest> studyRequests, ISStudyRequestRecycler srListener) {
             super(itemView);
             this.srListener = srListener;
             this.subject = itemView.findViewById(R.id.subject);
@@ -44,7 +42,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         }
     }
 
-    public RecyclerAdapter(Context context, User user, IStudyRequerstRecycler srListener) {
+    public RecyclerAdapter(Context context, User user, ISStudyRequestRecycler srListener) {
         this.srListener = srListener;
         this.context = context;
         this.user = user;
@@ -73,7 +71,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public int getItemCount() { return this.studyRequests.size(); }
 
-    interface IStudyRequerstRecycler {
+    interface ISStudyRequestRecycler {
         void showStudyRequestDetails(StudyRequest sr);
     }
 
