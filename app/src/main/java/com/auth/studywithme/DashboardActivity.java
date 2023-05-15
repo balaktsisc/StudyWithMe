@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity implements RecyclerAdapter.IStudyRequerstRecycler {
     RecyclerView recyclerView;
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder> adapter;
     User loggedUser;
@@ -36,7 +36,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecyclerAdapter(this,loggedUser);
+        adapter = new RecyclerAdapter(this,loggedUser,this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -67,6 +67,14 @@ public class DashboardActivity extends AppCompatActivity {
         return false;
     }
 
+    @Override
+    public void showStudyRequestDetails(StudyRequest sr) {
+        // Start the UpdateStudyRequestActivity and pass the selected study request
+        Intent intent = new Intent(this, UpdateStudyRequestActivity.class);
+        intent.putExtra("studyRequest", sr);
+        activityResultLauncher.launch(intent);
+    }
+
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -81,5 +89,4 @@ public class DashboardActivity extends AppCompatActivity {
                     recreate();
                 }
             });
-
 }

@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,33 +20,32 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     Context context;
     User user;
     ArrayList<StudyRequest> studyRequests;
+
+    IStudyRequerstRecycler srListener;
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView subject;
         TextView reason;
         TextView date;
+        IStudyRequerstRecycler srListener;
 
-        public ViewHolder(View itemView, ArrayList<StudyRequest> studyRequests) {
+        public ViewHolder(View itemView, ArrayList<StudyRequest> studyRequests, IStudyRequerstRecycler srListener) {
             super(itemView);
-            subject = itemView.findViewById(R.id.subject);
-            reason = itemView.findViewById(R.id.reason);
-            date = itemView.findViewById(R.id.date);
+            this.srListener = srListener;
+            this.subject = itemView.findViewById(R.id.subject);
+            this.reason = itemView.findViewById(R.id.reason);
+            this.date = itemView.findViewById(R.id.date);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 StudyRequest studyRequest = studyRequests.get(position);
-
-                // Start the UpdateStudyRequestActivity and pass the selected study request
-                Intent intent = new Intent(itemView.getContext(), UpdateStudyRequestActivity.class);
-                intent.putExtra("studyRequest", studyRequest);
-                itemView.getContext().startActivity(intent);
-
-//                Snackbar.make(v, "Click detected on item " + position,
-//                        Snackbar.LENGTH_LONG).show();
+                srListener.showStudyRequestDetails(studyRequest);
             });
         }
     }
 
-    public RecyclerAdapter(Context context, User user) {
+    public RecyclerAdapter(Context context, User user, IStudyRequerstRecycler srListener) {
+        this.srListener = srListener;
         this.context = context;
         this.user = user;
         try (StorageHandler sh = new StorageHandler(this.context,null,1)) {
@@ -60,7 +58,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_study_request, parent, false);
-        return new ViewHolder(v, studyRequests);
+        return new ViewHolder(v, studyRequests, srListener);
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -74,4 +72,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public int getItemCount() { return this.studyRequests.size(); }
+
+    interface IStudyRequerstRecycler {
+        void showStudyRequestDetails(StudyRequest sr);
+    }
+
 }

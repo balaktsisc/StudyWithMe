@@ -4,8 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+
+import java.util.ArrayList;
 
 public class UpdateStudyRequestActivity extends AppCompatActivity {
     private StudyRequest studyRequest;
@@ -20,8 +21,9 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_study_request);
 
 
-        // Get the selected study request from the intent
-        studyRequest = (StudyRequest) getIntent().getSerializableExtra("studyRequest");
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            studyRequest = (StudyRequest) extras.getSerializable("studyRequest");
 
         // Initialize views
         subjectEditText = findViewById(R.id.et_subject);
@@ -32,6 +34,9 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         subjectEditText.setText(studyRequest.getSubject());
         reasonEditText.setText(studyRequest.getReason());
         placeEditText.setText(studyRequest.getPlace());
+        } else {
+            finish();
+        }
     }
 
     public void updateStudyRequest(View view) {
