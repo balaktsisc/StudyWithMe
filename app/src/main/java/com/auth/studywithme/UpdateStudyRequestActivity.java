@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 
@@ -16,6 +18,7 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
     private EditText placeEditText;
     private EditText commentsEditText;
     private EditText maxMatchesEditText;
+    private Spinner periodSpinner;
 
 
     @SuppressLint("SetTextI18n")
@@ -35,6 +38,14 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         placeEditText = findViewById(R.id.et_place);
         commentsEditText = findViewById(R.id.et_comments);
         maxMatchesEditText = findViewById((R.id.et_max_matches));
+        periodSpinner = findViewById(R.id.spinner_period_of_study);
+
+
+        // Set up period spinner
+            ArrayAdapter<PeriodOfStudy> periodAdapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, PeriodOfStudy.values());
+            periodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            periodSpinner.setAdapter(periodAdapter);
 
         // Pre-fill the form fields with the current values of the study request
         subjectEditText.setText(studyRequest.getSubject());
@@ -42,6 +53,8 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         placeEditText.setText(studyRequest.getPlace());
         commentsEditText.setText(studyRequest.getComments());
         maxMatchesEditText.setText(Integer.toString(studyRequest.getMaxMatches()));
+        periodSpinner.setSelection(periodAdapter.getPosition(studyRequest.getPeriod()));
+
         } else {
             finish();
         }
@@ -54,6 +67,7 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         String updatedPlace = placeEditText.getText().toString();
         String updatedComments = commentsEditText.getText().toString();
         String updatedMaxMatches = maxMatchesEditText.getText().toString();
+        PeriodOfStudy updatedPeriod = (PeriodOfStudy) periodSpinner.getSelectedItem();
 
         // Update the study request object with the new values
         studyRequest.setSubject(updatedSubject);
@@ -61,6 +75,7 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         studyRequest.setPlace(updatedPlace);
         studyRequest.setComments(updatedComments);
         studyRequest.setMaxMatches(Integer.parseInt(updatedMaxMatches));
+        studyRequest.setPeriod(updatedPeriod);
 
         // Save the updated study request to the database
         try (StorageHandler sh = new StorageHandler(this, null, 1)) {
