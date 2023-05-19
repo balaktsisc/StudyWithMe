@@ -58,6 +58,33 @@
         app:layout_constraintTop_toBottomOf="@id/et_reason"
         android:layout_marginTop="16dp"/>
 
+
+    <EditText
+        android:id="@+id/et_comments"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:hint="Comments"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_place"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/et_max_matches"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:hint="MaxMatches"
+        android:inputType="number"
+        android:maxLines="1"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_comments"
+        android:layout_marginTop="16dp"/>
+
     <Button
         android:id="@+id/btn_update"
         android:layout_width="0dp"
@@ -66,7 +93,7 @@
         android:onClick="updateStudyRequest"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_delete"
-        app:layout_constraintTop_toBottomOf="@id/et_place"
+        app:layout_constraintTop_toBottomOf="@id/et_max_matches"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"/>
 
@@ -78,7 +105,7 @@
         android:onClick="deleteStudyRequest"
         app:layout_constraintStart_toEndOf="@id/btn_update"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_place"
+        app:layout_constraintTop_toBottomOf="@id/et_max_matches"
         android:layout_marginTop="32dp"
         android:layout_marginStart="8dp"/>
 

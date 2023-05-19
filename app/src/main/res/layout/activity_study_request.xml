@@ -58,13 +58,64 @@ tools:context=".StudyRequestActivity">
     app:layout_constraintTop_toBottomOf="@id/et_reason"
     android:layout_marginTop="16dp"/>
 
-<Button
+<EditText
+    android:id="@+id/et_comments"
+    android:layout_width="0dp"
+    android:layout_height="48dp"
+    android:hint="Comments"
+    android:inputType="text"
+    android:maxLines="1"
+    android:padding="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/et_place"
+    android:layout_marginTop="16dp"/>
+
+<EditText
+    android:id="@+id/et_max_matches"
+    android:layout_width="0dp"
+    android:layout_height="48dp"
+    android:hint="Max Matches"
+    android:inputType="number"
+    android:maxLines="1"
+    android:padding="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/et_comments"
+    android:layout_marginTop="16dp"/>
+
+
+<Spinner
+    android:id="@+id/sp_period"
+    android:layout_width="0dp"
+    android:layout_height="48dp"
+    android:layout_marginTop="16dp"
+    android:prompt="@string/select_period"
+    android:spinnerMode="dropdown"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/et_max_matches" />
+
+<TextView
+    android:id="@+id/tv_spinner_hint"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Period of study"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    app:layout_constraintStart_toStartOf="@id/sp_period"
+    app:layout_constraintEnd_toEndOf="@id/sp_period"
+    app:layout_constraintTop_toTopOf="@id/sp_period"
+    app:layout_constraintBottom_toBottomOf="@id/sp_period" />
+
+
+    <Button
     android:id="@+id/btn_create_request"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:onClick="onBtnClick"
     android:text="Create"
-    app:layout_constraintTop_toBottomOf="@id/et_place"
+    app:layout_constraintTop_toBottomOf="@id/sp_period"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     android:layout_marginTop="32dp"/>
