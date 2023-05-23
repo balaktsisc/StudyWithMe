@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         // Initialize StorageHandler
         storageHandler = new StorageHandler(this,null,1);
 
+
         TextView textView = findViewById(R.id.textViewSignUp);
         SpannableString spannableString = new SpannableString("Not a member? Sign up now");
 

@@ -50,7 +50,7 @@ public class DashboardActivity extends AppCompatActivity implements RecyclerAdap
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_request) {
-            Intent intent = new Intent(this, StudyRequestActivity.class);
+            Intent intent = new Intent(this, CreateStudyRequestActivity.class);
             intent.putExtra("loggedUser",loggedUser);
             activityResultLauncher.launch(intent);
 
@@ -70,7 +70,14 @@ public class DashboardActivity extends AppCompatActivity implements RecyclerAdap
     @Override
     public void showStudyRequestDetails(StudyRequest sr) {
         // Start the UpdateStudyRequestActivity and pass the selected study request
-        Intent intent = new Intent(this, UpdateStudyRequestActivity.class);
+
+        Intent intent;
+
+        if(sr.isMatched())
+            intent = new Intent(this, MatchesListActivity.class);
+        else
+            intent = new Intent(this, UpdateStudyRequestActivity.class);
+
         intent.putExtra("studyRequest", sr);
         activityResultLauncher.launch(intent);
     }

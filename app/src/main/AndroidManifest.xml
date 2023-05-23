@@ -15,7 +15,7 @@
             android:name=".UpdateStudyRequestActivity"
             android:exported="false" />
         <activity
-            android:name=".StudyRequestActivity"
+            android:name=".CreateStudyRequestActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
@@ -34,6 +34,12 @@
             android:exported="false" />
         <activity
             android:name=".AccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MatchesListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewStudyRequestActivity"
             android:exported="false" />
     </application>
 

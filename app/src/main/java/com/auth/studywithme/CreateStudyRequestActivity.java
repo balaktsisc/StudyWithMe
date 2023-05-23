@@ -11,7 +11,7 @@ import android.widget.Spinner;
 
 import java.util.Date;
 
-public class StudyRequestActivity extends AppCompatActivity {
+public class CreateStudyRequestActivity extends AppCompatActivity {
 
     private User loggedUser;
     StorageHandler storageHandler;
@@ -26,7 +26,7 @@ public class StudyRequestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_study_request);
+        setContentView(R.layout.activity_create_study_request);
 
         // Initialize StorageHandler
         storageHandler = new StorageHandler(this,null,1);

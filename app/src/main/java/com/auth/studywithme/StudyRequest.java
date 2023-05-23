@@ -7,7 +7,7 @@ import java.util.Date;
 public class StudyRequest  implements Serializable {
     private int id;
     private String subject, reason, place, comments;
-    private ArrayList<User> matchedUsers;
+    private ArrayList<StudyRequest> matchedRequests;
     private User requestedUser;
     private Date datetime;
     private PeriodOfStudy period;
@@ -21,10 +21,14 @@ public class StudyRequest  implements Serializable {
         this.reason = reason;
         this.place = place;
         this.comments = comments;
-        this.matchedUsers = new ArrayList<>();
+        this.matchedRequests = new ArrayList<>();
         this.datetime = datetime;
         this.period = period;
         this.maxMatches = maxMatches;
+    }
+
+    public boolean isMatched() {
+        return true ;//matchedRequests.size() > 0;
     }
 
     /* Setters and Getters */
@@ -38,8 +42,8 @@ public class StudyRequest  implements Serializable {
     public void setComments(String comments) { this.comments = comments; }
     public User getRequestedUser() { return requestedUser; }
     public void setRequestedUser(User requestedUser) { this.requestedUser = requestedUser; }
-    public ArrayList<User> getMatchedUsers() { return matchedUsers; }
-    public void setMatchedUsers(ArrayList<User> matchedUsers) { this.matchedUsers = matchedUsers; }
+    public ArrayList<StudyRequest> getMatchedRequests() { return matchedRequests; }
+    public void setMatchedRequests(ArrayList<StudyRequest> matchedRequests) { this.matchedRequests = matchedRequests; }
     public Date getDatetime() { return datetime; }
     public void setDatetime(Date datetime) { this.datetime = datetime; }
     public PeriodOfStudy getPeriod() { return period; }
