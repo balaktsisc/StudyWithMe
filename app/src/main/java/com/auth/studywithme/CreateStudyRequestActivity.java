@@ -63,7 +63,7 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
               //  String selectedItem = periodValues[position];
                 // Convert the selected string value to the corresponding PeriodOfStudy enum value
-                selectedPeriod = PeriodOfStudy.ONCE;
+                selectedPeriod = PeriodOfStudy.getPeriodOfStudy(periodValues[position]);
             }
 
             @Override

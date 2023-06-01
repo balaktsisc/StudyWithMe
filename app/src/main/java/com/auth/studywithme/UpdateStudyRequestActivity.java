@@ -38,14 +38,18 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
             placeEditText = findViewById(R.id.et_place);
             commentsEditText = findViewById(R.id.et_comments);
             maxMatchesEditText = findViewById((R.id.et_max_matches));
-            periodSpinner = findViewById(R.id.spinner_period_of_study);
+            periodSpinner = findViewById(R.id.sp_period);
 
 
             // Set up period spinner
-                ArrayAdapter<PeriodOfStudy> periodAdapter = new ArrayAdapter<>(this,
-                        android.R.layout.simple_spinner_item, PeriodOfStudy.values());
-                periodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                periodSpinner.setAdapter(periodAdapter);
+            PeriodOfStudy[] periods = PeriodOfStudy.values();
+            String[] periodValues = new String[periods.length];
+            for (int i = 0; i < periods.length; i++)
+                periodValues[i] = periods[i].getDisplayName();
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,periodValues);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            periodSpinner.setAdapter(adapter);
 
             // Pre-fill the form fields with the current values of the study request
             subjectEditText.setText(studyRequest.getSubject());
@@ -53,7 +57,7 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
             placeEditText.setText(studyRequest.getPlace());
             commentsEditText.setText(studyRequest.getComments());
             maxMatchesEditText.setText(Integer.toString(studyRequest.getMaxMatches()));
-            periodSpinner.setSelection(periodAdapter.getPosition(studyRequest.getPeriod()));
+            periodSpinner.setSelection(adapter.getPosition(studyRequest.getPeriod().getDisplayName()));
 
             if(studyRequest.isMatched()){
                 subjectEditText.setEnabled(false);
@@ -83,7 +87,7 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         String updatedPlace = placeEditText.getText().toString();
         String updatedComments = commentsEditText.getText().toString();
         String updatedMaxMatches = maxMatchesEditText.getText().toString();
-        PeriodOfStudy updatedPeriod = (PeriodOfStudy) periodSpinner.getSelectedItem();
+        PeriodOfStudy updatedPeriod = PeriodOfStudy.getPeriodOfStudy((String) periodSpinner.getSelectedItem());
 
         // Update the study request object with the new values
         studyRequest.setSubject(updatedSubject);

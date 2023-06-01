@@ -195,7 +195,7 @@ public class StorageHandler extends SQLiteOpenHelper {
         values.put(COL_PLACE, sr.getPlace());
         values.put(COL_COMMENTS, sr.getComments());
         values.put(COL_TIME, (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
-        values.put(COL_PERIOD, sr.getPeriod().name());
+        values.put(COL_PERIOD, sr.getPeriod().getDisplayName());
         values.put(COL_MAX, sr.getMaxMatches());
 
         boolean flag = true;

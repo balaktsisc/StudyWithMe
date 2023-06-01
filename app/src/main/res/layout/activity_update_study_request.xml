@@ -101,16 +101,20 @@
         android:autofillHints="" />
 
     <Spinner
-        android:id="@+id/spinner_period_of_study"
+        android:id="@+id/sp_period"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:padding="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/times_for_study"
+        android:prompt="@string/select_period"
+        android:spinnerMode="dialog"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_max_matches" />
+        app:layout_constraintTop_toBottomOf="@+id/et_max_matches"
+        app:layout_constraintVertical_bias="0.07999998" />
 
     <Button
         android:id="@+id/btn_update"
@@ -123,7 +127,7 @@
         android:text="@string/update"
         app:layout_constraintEnd_toStartOf="@id/btn_delete"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner_period_of_study" />
+        app:layout_constraintTop_toBottomOf="@+id/sp_period" />
 
     <Button
         android:id="@+id/btn_delete"
@@ -136,6 +140,6 @@
         android:text="@string/delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_update"
-        app:layout_constraintTop_toBottomOf="@id/spinner_period_of_study" />
+        app:layout_constraintTop_toBottomOf="@+id/sp_period" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
