@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -165,7 +168,7 @@ public class StorageHandler extends SQLiteOpenHelper {
         values.put(COL_PLACE, sr.getPlace());
         values.put(COL_COMMENTS, sr.getComments());
         values.put(COL_TIME, (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
-        values.put(COL_PERIOD, sr.getPeriod().name());
+        values.put(COL_PERIOD, sr.getPeriod().getDisplayName());
         values.put(COL_MAX, sr.getMaxMatches());
 
         boolean flag = true;
@@ -379,7 +382,7 @@ public class StorageHandler extends SQLiteOpenHelper {
                 sr.setPlace(cursor.getString(4));
                 sr.setComments(cursor.getString(5));
                 sr.setDatetime((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).parse(cursor.getString(6)));
-                sr.setPeriod(PeriodOfStudy.valueOf(cursor.getString(7)));
+                sr.setPeriod(PeriodOfStudy.getPeriodOfStudy(cursor.getString(7)));
                 sr.setMaxMatches(Integer.parseInt(cursor.getString(8)));
                 sr.setMatchedRequests(fetchMatchesOfStudyRequest(sr));
                 srs.add(sr);

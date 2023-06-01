@@ -44,34 +44,26 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
         commentsEditText = findViewById(R.id.et_comments);
         maxMatchesEditText = findViewById(R.id.et_max_matches);
 
-        Spinner spinnerPeriod = findViewById(R.id.sp_period);
+        Spinner periodSpinner = findViewById(R.id.sp_period);
         // Define the string array for the spinner values
-        String[] periodValues = new String[]{
-                "once",
-                "twice",
-                "sometimes",
-                "one_week",
-                "two_weeks",
-                "semester",
-                "other"
-        };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                periodValues
-        );
 
+        PeriodOfStudy[] periods = PeriodOfStudy.values();
+        String[] periodValues = new String[periods.length];
+        for (int i = 0; i < periods.length; i++)
+            periodValues[i] = periods[i].getDisplayName();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,periodValues);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPeriod.setAdapter(adapter);
+        periodSpinner.setAdapter(adapter);
 
         // Set listener so the spinner can listen for the selected item
-        spinnerPeriod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = parent.getItemAtPosition(position).toString();
+              //  String selectedItem = periodValues[position];
                 // Convert the selected string value to the corresponding PeriodOfStudy enum value
-                selectedPeriod = PeriodOfStudy.valueOf(selectedItem);
+                selectedPeriod = PeriodOfStudy.ONCE;
             }
 
             @Override
@@ -84,7 +76,7 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
 
     }
 
-    public void onBtnClick(View view) {
+    public void onCreateButtonClick(View view) {
         // Get form values
         String subject = subjectEditText.getText().toString();
         String reason = reasonEditText.getText().toString();

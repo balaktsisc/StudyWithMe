@@ -28,7 +28,7 @@ public class StudyRequest  implements Serializable {
     }
 
     public boolean isMatched() {
-        return true ;//matchedRequests.size() > 0;
+        return matchedRequests.size() > 0;
     }
 
     /* Setters and Getters */

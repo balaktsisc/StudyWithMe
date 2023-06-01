@@ -32,7 +32,6 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
             EditText commentsEditText = findViewById(R.id.et_comments);
             Spinner periodSpinner = findViewById(R.id.spinner_period_of_study);
 
-
             // Set up period spinner
             ArrayAdapter<PeriodOfStudy> periodAdapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, PeriodOfStudy.values());
