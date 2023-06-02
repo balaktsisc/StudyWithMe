@@ -12,15 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MatchesListActivity extends AppCompatActivity implements RecyclerAdapter.ISStudyRequestRecycler {
+    public static double SIMILARITY_THRESHOLD = 0.6;
     RecyclerView recyclerView;
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder> adapter;
     StudyRequest sr;
-
-//    static int CREATED_REQUEST = 100;
-//    static int DELETED_ACCOUNT = 101;
-//    static int UPDATED_REQUEST = 102;
-//    static int DELETED_REQUEST = 103;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,32 +34,6 @@ public class MatchesListActivity extends AppCompatActivity implements RecyclerAd
         recyclerView.setAdapter(adapter);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        super.onCreateOptionsMenu(menu);
-//        getMenuInflater().inflate(R.menu.menu_appbar, menu);
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.menu_add_request) {
-//            Intent intent = new Intent(this, StudyRequestActivity.class);
-//            intent.putExtra("loggedUser", sr);
-//            activityResultLauncher.launch(intent);
-//
-//            item.setChecked(!item.isChecked());
-//            return true;
-//        } else if (item.getItemId() == R.id.menu_account) {
-//            Intent intent = new Intent(this, AccountActivity.class);
-//            intent.putExtra("loggedUser", sr);
-//            activityResultLauncher.launch(intent);
-//
-//            item.setChecked(!item.isChecked());
-//            return true;
-//        }
-//        return false;
-//    }
 
     @Override
     public void showStudyRequestDetails(StudyRequest sr) {
@@ -74,18 +43,4 @@ public class MatchesListActivity extends AppCompatActivity implements RecyclerAd
         this.startActivity(intent);
     }
 
-//    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
-//            new ActivityResultContracts.StartActivityForResult(),
-//            result -> {
-//                if (result.getResultCode() == DELETED_ACCOUNT) {
-//                    startActivity(new Intent(this,LoginActivity.class));
-//                    finish();
-//                } else if (result.getResultCode() == CREATED_REQUEST) {
-//                    recreate();
-//                } else if(result.getResultCode() == UPDATED_REQUEST) {
-//                    recreate();
-//                } else if(result.getResultCode() == DELETED_REQUEST){
-//                    recreate();
-//                }
-//            });
 }

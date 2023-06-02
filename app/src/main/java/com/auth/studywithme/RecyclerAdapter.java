@@ -54,17 +54,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         try (StorageHandler sh = new StorageHandler(this.context,null,1)) {
             this.studyRequests = sh.fetchStudyRequestsOfUser(user);
         }
-        if(this.studyRequests.size() ==0);
     }
 
     public RecyclerAdapter(Context context, StudyRequest sr, ISStudyRequestRecycler srListener) {
         this.srListener = srListener;
         this.context = context;
         this.user = sr.getRequestedUser();
-//        try (StorageHandler sh = new StorageHandler(this.context,null,1)) {
-//            this.studyRequests = sh.fetchMatchesOfStudyRequest(sr);
-//        }
-        this.studyRequests = sr.getMatchedRequests();
+        try (StorageHandler sh = new StorageHandler(this.context,null,1)) {
+            this.studyRequests = sh.fetchMatchesOfStudyRequest(sr);
+        }
     }
 
     @NonNull

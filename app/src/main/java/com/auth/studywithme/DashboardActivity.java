@@ -79,7 +79,7 @@ public class DashboardActivity extends AppCompatActivity implements RecyclerAdap
             intent = new Intent(this, UpdateStudyRequestActivity.class);
 
         intent.putExtra("studyRequest", sr);
-        activityResultLauncher.launch(intent);
+        startActivity(intent);
     }
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
