@@ -53,6 +53,14 @@ public class AccountActivity extends Account {
                 TryActivateStoreButton();
             } else {
                 title.setText("Study partner details");
+                firstNameEditText.setText(loggedUser.getName());
+                firstNameEditText.setEnabled(false);
+                lastNameEditText.setVisibility(View.GONE);
+                usernameEditText.setVisibility(View.GONE);
+                passwordEditText.setVisibility(View.GONE);
+                emailEditText.setEnabled(false);
+                universityEditText.setEnabled(false);
+                departmentEditText.setEnabled(false);
                 deleteButton.setVisibility(View.INVISIBLE);
                 storeButton.setVisibility(View.INVISIBLE);
             }

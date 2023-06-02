@@ -7,7 +7,7 @@
     tools:context=".ViewStudyRequestActivity">
 
     <TextView
-        android:id="@+id/tv_edit_study_request"
+        android:id="@+id/tv_study_request_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/details"
@@ -23,6 +23,7 @@
         android:id="@+id/et_subject"
         android:layout_width="0dp"
         android:layout_height="48dp"
+        android:textColor="@color/black"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
@@ -32,12 +33,13 @@
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_edit_study_request"
+        app:layout_constraintTop_toBottomOf="@id/tv_study_request_details"
         android:autofillHints="" />
 
     <EditText
         android:id="@+id/et_reason"
         android:layout_width="0dp"
+        android:textColor="@color/black"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
@@ -54,6 +56,7 @@
     <EditText
         android:id="@+id/et_place"
         android:layout_width="0dp"
+        android:textColor="@color/black"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
@@ -70,6 +73,7 @@
 
     <EditText
         android:id="@+id/et_comments"
+        android:textColor="@color/black"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
@@ -88,6 +92,7 @@
         android:id="@+id/sp_period"
         android:layout_width="0dp"
         android:layout_height="48dp"
+        android:textColor="@color/black"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:contentDescription="@string/times_for_study"

@@ -37,4 +37,5 @@
     <string name="matches">Matches</string>
     <string name="times_to_study">Times to study</string>
     <string name="your_study_partner">Your study partner</string>
+    <string name="your_study_request">Your study request</string>
 </resources>

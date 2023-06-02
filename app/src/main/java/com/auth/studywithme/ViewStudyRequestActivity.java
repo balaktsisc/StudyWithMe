@@ -2,18 +2,22 @@ package com.auth.studywithme;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ViewStudyRequestActivity extends AppCompatActivity {
-
     StudyRequest studyRequest;
     StorageHandler sh;
+    User user;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -26,6 +30,7 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             studyRequest = sh.fetchStudyRequestById(extras.getLong("studyRequestId"));
+            user = sh.fetchUserById(extras.getLong("loggedUserId"));
 
             // Initialize views
             EditText subjectEditText = findViewById(R.id.et_subject);
@@ -50,6 +55,16 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
             placeEditText.setText(studyRequest.getPlace());
             commentsEditText.setText(studyRequest.getComments());
             periodSpinner.setSelection(adapter.getPosition(studyRequest.getPeriod().getDisplayName()));
+            periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ((TextView) view).setTextColor(Color.BLACK);
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
             if(sh.isStudyRequestMatched(studyRequest.getId())){
                 subjectEditText.setEnabled(false);
@@ -57,6 +72,13 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
                 placeEditText.setEnabled(false);
                 commentsEditText.setEnabled(false);
                 periodSpinner.setEnabled(false);
+            }
+
+            if(studyRequest.getRequestedUserId() == user.getId()) {
+                Button ownerUser = findViewById(R.id.ownerUser);
+                ownerUser.setVisibility(View.GONE);
+                TextView title = findViewById(R.id.tv_study_request_details);
+                title.setText(R.string.your_study_request);
             }
 
         } else {

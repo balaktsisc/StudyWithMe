@@ -43,6 +43,7 @@ public class MatchesListActivity extends AppCompatActivity implements RecyclerAd
         // Start the UpdateStudyRequestActivity and pass the selected study request
         Intent intent = new Intent(this, ViewStudyRequestActivity.class);
         intent.putExtra("studyRequestId", srId);
+        intent.putExtra("loggedUserId", sr.getRequestedUserId());
         this.startActivity(intent);
     }
 
