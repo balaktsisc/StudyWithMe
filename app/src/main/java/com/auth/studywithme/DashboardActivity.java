@@ -66,6 +66,12 @@ public class DashboardActivity extends AppCompatActivity implements RecyclerAdap
 
             item.setChecked(!item.isChecked());
             return true;
+        } else if (item.getItemId() == R.id.menu_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            activityResultLauncher.launch(intent);
+
+            item.setChecked(!item.isChecked());
+            return true;
         }
         return false;
     }

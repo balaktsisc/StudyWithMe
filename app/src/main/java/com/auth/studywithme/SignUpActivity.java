@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 public class SignUpActivity extends Account {
     TextView title;
     Button storeButton;
@@ -15,6 +17,9 @@ public class SignUpActivity extends Account {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Objects.requireNonNull(getSupportActionBar()).hide();
+
         storeButton = findViewById(R.id.storeButton);
         storeButton.setText("Create");
         title = findViewById(R.id.title);
