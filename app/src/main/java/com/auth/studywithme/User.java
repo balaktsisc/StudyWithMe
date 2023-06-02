@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class User implements Serializable {
-    private int id;
+    private long id;
     private String username, email, password;
     private String firstName, lastName;
     private String university, department;
-    private ArrayList<StudyRequest> requests;
 
     /* Constructors */
     public User() { }
@@ -21,7 +20,6 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.university = university;
         this.department = department;
-        this.requests = new ArrayList<>();
     }
 
     /* Setters and Getters */
@@ -37,11 +35,9 @@ public class User implements Serializable {
     public void setUniversity(String university) { this.university = university; }
     public String getDepartment() { return department; }
     public void setDepartment(String department) { this.department = department; }
-    public ArrayList<StudyRequest> getRequests() { return requests; }
-    public void setRequests(ArrayList<StudyRequest> requests) { this.requests = requests; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getName() { return firstName + " " + lastName; }
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 }

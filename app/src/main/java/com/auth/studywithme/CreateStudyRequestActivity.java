@@ -35,7 +35,7 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
 //            Get current user
-            loggedUser = (User) extras.getSerializable("loggedUser");
+            loggedUser = storageHandler.fetchUserById(extras.getLong("loggedUserId"));
         }
 
         subjectEditText = findViewById(R.id.et_subject);
@@ -86,7 +86,8 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
 
         // Create new Study Request object and add it to the database
         StudyRequest sr = new StudyRequest(subject, reason, place,comments, new Date(),selectedPeriod,Integer.parseInt(maxMatches));
-        storageHandler.addStudyRequest(sr,loggedUser);
+        sr.setRequestedUserId(loggedUser.getId());
+        storageHandler.addStudyRequest(sr);
 
         setResult(100);
         finish();

@@ -16,30 +16,33 @@ public class MatchesListActivity extends AppCompatActivity implements RecyclerAd
     RecyclerView recyclerView;
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder> adapter;
     StudyRequest sr;
+    StorageHandler sh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matches_list);
 
+        sh = new StorageHandler(this,null,1);
+
         Bundle extras = getIntent().getExtras();
         if (extras != null)
-            sr = (StudyRequest) extras.getSerializable("studyRequest");
+            sr = sh.fetchStudyRequestById(extras.getLong("studyRequestId"));
         else
             finish();
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecyclerAdapter(this, sr,this);
+        adapter = new RecyclerAdapter(this,sr,this,sh);
         recyclerView.setAdapter(adapter);
     }
 
 
     @Override
-    public void showStudyRequestDetails(StudyRequest sr) {
+    public void showStudyRequestDetails(long srId) {
         // Start the UpdateStudyRequestActivity and pass the selected study request
         Intent intent = new Intent(this, ViewStudyRequestActivity.class);
-        intent.putExtra("studyRequest", sr);
+        intent.putExtra("studyRequestId", srId);
         this.startActivity(intent);
     }
 

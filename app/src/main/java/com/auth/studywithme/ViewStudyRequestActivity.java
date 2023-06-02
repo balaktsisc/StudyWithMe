@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ViewStudyRequestActivity extends AppCompatActivity {
 
     StudyRequest studyRequest;
+    StorageHandler sh;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -20,10 +21,11 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_study_request);
 
+        sh = new StorageHandler(this,null,1);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            studyRequest = (StudyRequest) extras.getSerializable("studyRequest");
+            studyRequest = sh.fetchStudyRequestById(extras.getLong("studyRequestId"));
 
             // Initialize views
             EditText subjectEditText = findViewById(R.id.et_subject);
@@ -49,7 +51,7 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
             commentsEditText.setText(studyRequest.getComments());
             periodSpinner.setSelection(adapter.getPosition(studyRequest.getPeriod().getDisplayName()));
 
-            if(studyRequest.isMatched()){
+            if(sh.isStudyRequestMatched(studyRequest.getId())){
                 subjectEditText.setEnabled(false);
                 reasonEditText.setEnabled(false);
                 placeEditText.setEnabled(false);
@@ -64,7 +66,7 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
 
     public void viewSROwner(View view) {
         Intent intent = new Intent(this, AccountActivity.class);
-        intent.putExtra("user",studyRequest.getRequestedUser());
+        intent.putExtra("userId",studyRequest.getRequestedUserId());
         startActivity(intent);
     }
 }

@@ -32,10 +32,10 @@ public class AccountActivity extends Account {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            loggedUser = (User) extras.getSerializable("loggedUser");
+            loggedUser = super.sh.fetchUserById(extras.getLong("loggedUserId"));
 
             if(loggedUser == null) {
-                loggedUser = (User) extras.getSerializable("user");
+                loggedUser = super.sh.fetchUserById(extras.getLong("userId"));
                 authorized = false;
             }
 

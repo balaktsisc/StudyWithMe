@@ -16,6 +16,7 @@ public class DashboardActivity extends AppCompatActivity implements RecyclerAdap
     RecyclerView recyclerView;
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder> adapter;
     User loggedUser;
+    StorageHandler sh;
 
     static int CREATED_REQUEST = 100;
     static int DELETED_ACCOUNT = 101;
@@ -28,15 +29,17 @@ public class DashboardActivity extends AppCompatActivity implements RecyclerAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        sh = new StorageHandler(this,null,1);
+
         Bundle extras = getIntent().getExtras();
         if (extras != null)
-            loggedUser = (User) extras.getSerializable("loggedUser");
+            loggedUser = sh.fetchUserById(extras.getLong("loggedUserId"));
         else
-            loggedUser = new User();
+            finish();
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecyclerAdapter(this,loggedUser,this);
+        adapter = new RecyclerAdapter(this,loggedUser,this,sh);
         recyclerView.setAdapter(adapter);
     }
 
@@ -51,14 +54,14 @@ public class DashboardActivity extends AppCompatActivity implements RecyclerAdap
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_request) {
             Intent intent = new Intent(this, CreateStudyRequestActivity.class);
-            intent.putExtra("loggedUser",loggedUser);
+            intent.putExtra("loggedUserId",loggedUser.getId());
             activityResultLauncher.launch(intent);
 
             item.setChecked(!item.isChecked());
             return true;
         } else if (item.getItemId() == R.id.menu_account) {
             Intent intent = new Intent(this, AccountActivity.class);
-            intent.putExtra("loggedUser",loggedUser);
+            intent.putExtra("loggedUserId",loggedUser.getId());
             activityResultLauncher.launch(intent);
 
             item.setChecked(!item.isChecked());
@@ -68,17 +71,15 @@ public class DashboardActivity extends AppCompatActivity implements RecyclerAdap
     }
 
     @Override
-    public void showStudyRequestDetails(StudyRequest sr) {
-        // Start the UpdateStudyRequestActivity and pass the selected study request
-
+    public void showStudyRequestDetails(long srId) {
         Intent intent;
 
-        if(sr.isMatched())
+        if(sh.isStudyRequestMatched(srId))
             intent = new Intent(this, MatchesListActivity.class);
         else
             intent = new Intent(this, UpdateStudyRequestActivity.class);
 
-        intent.putExtra("studyRequest", sr);
+        intent.putExtra("studyRequestId", srId);
         startActivity(intent);
     }
 

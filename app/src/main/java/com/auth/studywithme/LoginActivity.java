@@ -63,8 +63,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
 
             // Switch to the new activity for creating a study request
-            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-            intent.putExtra("loggedUser",loggedUser);
+            Intent intent = new Intent(this, DashboardActivity.class);
+            intent.putExtra("loggedUserId",loggedUser.getId());
             startActivity(intent);
             finish();
         } else {

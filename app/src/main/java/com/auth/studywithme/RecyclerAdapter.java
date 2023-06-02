@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +20,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     Context context;
     User user;
     ArrayList<StudyRequest> studyRequests;
-
+    StorageHandler sh;
     ISStudyRequestRecycler srListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -42,27 +41,29 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 StudyRequest studyRequest = studyRequests.get(position);
-                srListener.showStudyRequestDetails(studyRequest);
+                srListener.showStudyRequestDetails(studyRequest.getId());
             });
         }
     }
 
-    public RecyclerAdapter(Context context, User user, ISStudyRequestRecycler srListener) {
+    public RecyclerAdapter(Context context, User user, ISStudyRequestRecycler srListener, StorageHandler sh) {
+        this.sh = sh;
         this.srListener = srListener;
         this.context = context;
         this.user = user;
-        try (StorageHandler sh = new StorageHandler(this.context,null,1)) {
-            this.studyRequests = sh.fetchStudyRequestsOfUser(user);
-        }
+        this.studyRequests = new ArrayList<>();
+        for (Integer srId : sh.fetchStudyRequestsOfUser(user.getId()))
+            this.studyRequests.add(sh.fetchStudyRequestById(srId));
     }
 
-    public RecyclerAdapter(Context context, StudyRequest sr, ISStudyRequestRecycler srListener) {
+    public RecyclerAdapter(Context context, StudyRequest sr, ISStudyRequestRecycler srListener, StorageHandler sh) {
+        this.sh = sh;
         this.srListener = srListener;
         this.context = context;
-        this.user = sr.getRequestedUser();
-        try (StorageHandler sh = new StorageHandler(this.context,null,1)) {
-            this.studyRequests = sh.fetchMatchesOfStudyRequest(sr);
-        }
+        this.user = sh.fetchUserById(sr.getRequestedUserId());
+        this.studyRequests = new ArrayList<>();
+        for (Integer srId : sh.fetchMatchesOfStudyRequest(sr.getId()))
+            this.studyRequests.add(sh.fetchStudyRequestById(srId));
     }
 
     @NonNull
@@ -77,7 +78,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerAdapter.ViewHolder holder, int position) {
         StudyRequest sr = studyRequests.get(position);
-        if(sr.isMatched()) holder.card.setCardBackgroundColor(Color.parseColor("#d4ffb2"));
+
+        if(sh.isStudyRequestMatched(sr.getId()))
+            holder.card.setCardBackgroundColor(Color.parseColor("#d4ffb2"));
+
         holder.subject.setText(sr.getSubject());
         holder.reason.setText(sr.getReason());
         holder.date.setText((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
@@ -87,7 +91,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public int getItemCount() { return this.studyRequests.size(); }
 
     interface ISStudyRequestRecycler {
-        void showStudyRequestDetails(StudyRequest sr);
+        void showStudyRequestDetails(long srId);
     }
 
 }

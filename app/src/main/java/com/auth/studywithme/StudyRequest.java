@@ -7,10 +7,10 @@ import java.util.Date;
 import java.util.Objects;
 
 public class StudyRequest  implements Serializable {
-    private int id;
+    private long id;
     private String subject, reason, place, comments;
-    private ArrayList<StudyRequest> matchedRequests;
-    private User requestedUser;
+//    private ArrayList<Integer> matchedRequests;
+    private long requestedUserId;
     private Date datetime;
     private PeriodOfStudy period;
     private int maxMatches;
@@ -23,17 +23,17 @@ public class StudyRequest  implements Serializable {
         this.reason = reason;
         this.place = place;
         this.comments = comments;
-        this.matchedRequests = new ArrayList<>();
+//        this.matchedRequests = new ArrayList<>();
         this.datetime = datetime;
         this.period = period;
         this.maxMatches = maxMatches;
     }
 
-    public boolean isMatched() {
-        return matchedRequests == null || matchedRequests.size() > 0;
-    }
+//    public boolean isMatched() {
+//        return matchedRequests == null || matchedRequests.size() > 0;
+//    }
 
-    public boolean isFulfilled() { return matchedRequests.size() >= maxMatches; }
+//    public boolean isFulfilled() { return matchedRequests.size() >= maxMatches; }
 
     /* Setters and Getters */
     public String getSubject() { return subject; }
@@ -44,18 +44,18 @@ public class StudyRequest  implements Serializable {
     public void setPlace(String place) { this.place = place; }
     public String getComments() { return comments; }
     public void setComments(String comments) { this.comments = comments; }
-    public User getRequestedUser() { return requestedUser; }
-    public void setRequestedUser(User requestedUser) { this.requestedUser = requestedUser; }
-    public ArrayList<StudyRequest> getMatchedRequests() { return matchedRequests; }
-    public void setMatchedRequests(ArrayList<StudyRequest> matchedRequests) { this.matchedRequests = matchedRequests; }
+    public long getRequestedUserId() { return requestedUserId; }
+    public void setRequestedUserId(long requestedUserId) { this.requestedUserId = requestedUserId; }
+//    public ArrayList<Integer> getMatchedRequests() { return matchedRequests; }
+//    public void setMatchedRequests(ArrayList<Integer> matchedRequests) { this.matchedRequests = matchedRequests; }
     public Date getDatetime() { return datetime; }
     public void setDatetime(Date datetime) { this.datetime = datetime; }
     public PeriodOfStudy getPeriod() { return period; }
     public void setPeriod(PeriodOfStudy period) { this.period = period; }
     public int getMaxMatches() { return maxMatches; }
     public void setMaxMatches(int maxMatches) { this.maxMatches = maxMatches; }
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 
     public static double matchRequest(StudyRequest r1, StudyRequest r2){
 

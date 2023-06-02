@@ -27,6 +27,7 @@ public abstract class Account extends AppCompatActivity {
     EditText departmentEditText;
     StorageHandler storageHandler;
     Button signUpButton;
+    StorageHandler sh;
     static int NUM_FLAGS = 3;
     boolean[] flags = new boolean[NUM_FLAGS];
 
@@ -35,6 +36,8 @@ public abstract class Account extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+
+        sh = new StorageHandler(this,null,1);
 
         for(int i = 0; i < 3; i++) flags[i] = false;
 
