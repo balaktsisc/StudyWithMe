@@ -32,7 +32,7 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
             EditText reasonEditText = findViewById(R.id.et_reason);
             EditText placeEditText = findViewById(R.id.et_place);
             EditText commentsEditText = findViewById(R.id.et_comments);
-            Spinner periodSpinner = findViewById(R.id.spinner_period_of_study);
+            Spinner periodSpinner = findViewById(R.id.sp_period);
 
             // Set up period spinner
             PeriodOfStudy[] periods = PeriodOfStudy.values();
