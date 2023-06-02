@@ -13,27 +13,31 @@ public class AccountActivity extends Account {
     Button storeButton;
     Button deleteButton;
     User loggedUser;
+    Boolean authorized;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        authorized = true;
+
         storeButton = findViewById(R.id.storeButton);
         storeButton.setText("Update");
 
         title = findViewById(R.id.title);
-        title.setText("Account");
 
         deleteButton = findViewById(R.id.deleteButton);
         deleteButton.setVisibility(View.VISIBLE);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            loggedUser = (User) extras.getSerializable("loggedUser");
+            loggedUser = super.sh.fetchUserById(extras.getLong("loggedUserId"));
 
-            for(int i = 0; i < NUM_FLAGS; i++) super.flags[i] = true;
-            TryActivateStoreButton();
+            if(loggedUser == null) {
+                loggedUser = super.sh.fetchUserById(extras.getLong("userId"));
+                authorized = false;
+            }
 
             super.firstNameEditText.setText(loggedUser.getFirstName());
             super.lastNameEditText.setText(loggedUser.getLastName());
@@ -42,32 +46,43 @@ public class AccountActivity extends Account {
             super.emailEditText.setText(loggedUser.getEmail());
             super.universityEditText.setText(loggedUser.getUniversity());
             super.departmentEditText.setText((loggedUser.getDepartment()));
+
+            if(authorized) {
+                title.setText("Account");
+                for (int i = 0; i < NUM_FLAGS; i++) super.flags[i] = true;
+                TryActivateStoreButton();
+            } else {
+                title.setText("Study partner details");
+                deleteButton.setVisibility(View.INVISIBLE);
+                storeButton.setVisibility(View.INVISIBLE);
+            }
         } else {
             finish();
         }
     }
 
     @Override
-    public void storeAccount(View view){
-        User u = new User();
-        u.setFirstName(firstNameEditText.getText().toString());
-        u.setLastName(lastNameEditText.getText().toString());
-        u.setUsername(usernameEditText.getText().toString());
-        u.setPassword(passwordEditText.getText().toString());
-        u.setEmail(emailEditText.getText().toString());
-        u.setUniversity(universityEditText.getText().toString());
-        u.setDepartment(departmentEditText.getText().toString());
+    public void storeAccount(View view) {
+        if (authorized) {
+            User u = new User();
+            u.setFirstName(firstNameEditText.getText().toString());
+            u.setLastName(lastNameEditText.getText().toString());
+            u.setUsername(usernameEditText.getText().toString());
+            u.setPassword(passwordEditText.getText().toString());
+            u.setEmail(emailEditText.getText().toString());
+            u.setUniversity(universityEditText.getText().toString());
+            u.setDepartment(departmentEditText.getText().toString());
 
-        TryActivateStoreButton();
+            TryActivateStoreButton();
 
-        try (StorageHandler storageHandler = new StorageHandler(this, null, 1)) {
-            if (storageHandler.updateUser(loggedUser.getId(),u)) {
-                Toast.makeText(this, "Account updated successfully!", Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                Toast.makeText(this, "Account failed to be updated", Toast.LENGTH_SHORT).show();
+            try (StorageHandler storageHandler = new StorageHandler(this, null, 1)) {
+                if (storageHandler.updateUser(loggedUser.getId(), u)) {
+                    Toast.makeText(this, "Account updated successfully!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, "Account failed to be updated", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
-
 }

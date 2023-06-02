@@ -38,15 +38,18 @@ public class StorageHandler extends SQLiteOpenHelper {
     public static final String COL_DEPARTMENT = "department";
 
     // Matched Users table
-    public static final String TABLE_MATCHES = "matchedUsers";
+    public static final String TABLE_MATCHES = "matches";
     public static final String COL_MUID = "_muid";
 
 
     // Constructor
     public StorageHandler(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, version);
+        // Remove commenting for the following if the dbs' schema has changed. REMEMBER TO COMMENT IT OUT AGAIN!
+//        onUpgrade(this.getReadableDatabase(),1,1);
     }
 
+    //region Initialization::db
     @Override
     public void onCreate(SQLiteDatabase db) {
       String CREATE_STUDY_REQUESTS_TABLE = "CREATE TABLE " +
@@ -75,12 +78,12 @@ public class StorageHandler extends SQLiteOpenHelper {
         String CREATE_MATCHES_TABLE = "CREATE TABLE " +
                 TABLE_MATCHES + "(" +
                 COL_MUID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +
-                COL_RID + " INTEGER," +
-                COL_UID + " TEXT," +
-                "FOREIGN KEY " + "(" + COL_RID + ")" +
+                COL_RID + "1" + " INTEGER," +
+                COL_RID + "2" + " TEXT," +
+                "FOREIGN KEY " + "(" + COL_RID + "2" + ")" +
                 " REFERENCES " + TABLE_REQUESTS + "(" + COL_RID + "), " +
-                "FOREIGN KEY " + "(" + COL_UID + ")" +
-                " REFERENCES " + TABLE_USERS + "(" + COL_UID + ") " + ")";
+                "FOREIGN KEY " + "(" + COL_RID + "2" + ")" +
+                " REFERENCES " + TABLE_REQUESTS + "(" + COL_RID + ") " + ")";
 
         db.execSQL(CREATE_STUDY_REQUESTS_TABLE);
         db.execSQL(CREATE_USERS_TABLE);
@@ -94,7 +97,9 @@ public class StorageHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MATCHES);
         onCreate(db);
     }
+    //endregion
 
+    //region User::data functionalities
     public boolean addUser(User u) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -109,15 +114,17 @@ public class StorageHandler extends SQLiteOpenHelper {
         values.put(COL_DEPARTMENT, u.getDepartment());
 
         boolean flag = true;
-        for(String v : values.keySet()) { if (values.get(v) == null || values.get(v).equals("")) flag = false; }
+        for (String v : values.keySet()) {
+            if (values.get(v) == null || values.get(v).equals("")) flag = false;
+        }
 
         if (flag) result = db.insert(TABLE_USERS, null, values);
         db.close();
 
-        return result != -1 ;
+        return result != -1;
     }
 
-    public boolean updateUser(int ouId, User nu) {
+    public boolean updateUser(long ouId, User nu){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         long result = 0;
@@ -131,67 +138,40 @@ public class StorageHandler extends SQLiteOpenHelper {
         values.put(COL_DEPARTMENT, nu.getDepartment());
 
         boolean flag = true;
-        for(String v : values.keySet()) { if (values.get(v) == null || values.get(v).equals("")) flag = false; }
+        for (String v : values.keySet()) {
+            if (values.get(v) == null || values.get(v).equals("")) flag = false;
+        }
 
-        if (flag) result = db.update(TABLE_USERS, values,COL_UID + " = ?", new String[] { String.valueOf(ouId) });
+        if (flag)
+            result = db.update(TABLE_USERS, values, COL_UID + " = ?", new String[]{String.valueOf(ouId)});
         db.close();
 
-        return result > 0 ;
+        return result > 0;
     }
 
-    public boolean deleteUser(String username) {
+    public boolean deleteUser(String username){
         User u = fetchUserByUsername(username);
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.delete(TABLE_USERS, COL_UID + " = ?",
-                new String[] { String.valueOf(u.getId()) });
+                new String[]{String.valueOf(u.getId())});
         db.close();
         return result > 0;
     }
 
-    @SuppressLint("SimpleDateFormat")
-    public boolean addStudyRequest(StudyRequest sr, User u) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        long result = -1;
+    public ArrayList<User> fetchAllUsers() {
+        String query = "SELECT " + COL_UID + " FROM " + TABLE_USERS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
 
-        System.out.println(sr);
-        System.out.println(u);
+        ArrayList<User> users = new ArrayList<>();
+        try { while (cursor.moveToNext()) { users.add(fetchUserById(Integer.parseInt(cursor.getString(0)))); } }
+        finally { cursor.close(); }
 
-        values.put(COL_UID,u.getId());
-        values.put(COL_SUBJECT, sr.getSubject());
-        values.put(COL_REASON, sr.getReason());
-        values.put(COL_PLACE, sr.getPlace());
-        values.put(COL_COMMENTS, sr.getComments());
-        values.put(COL_TIME, (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
-        values.put(COL_PERIOD, sr.getPeriod().name());
-        values.put(COL_MAX, sr.getMaxMatches());
-
-        boolean flag = true;
-        for(String v : values.keySet()) { if (values.get(v) == null || (values.get(v).equals("") && !v.equals("comments") )) flag = false; }
-
-        if (flag) result = db.insert(TABLE_REQUESTS,null, values);
         db.close();
-
-        return result != -1;
+        return users;
     }
 
-    public boolean addMatch(StudyRequest sr, User u) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        if(fetchMatchesOfStudyRequest(sr).size() < sr.getMaxMatches()) {
-            values.put(COL_UID, u.getId());
-            values.put(COL_RID, sr.getId());
-            db.insert(TABLE_MATCHES,null, values);
-            db.close();
-            return true;
-        } else {
-            db.close();
-            return false;
-        }
-    }
-
-    private User fetchUserById(int id) {
+    public User fetchUserById(long id) {
         String query = "SELECT * FROM " + TABLE_USERS + " WHERE " +
                 COL_UID + " = '" + id + "'";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -208,7 +188,7 @@ public class StorageHandler extends SQLiteOpenHelper {
             u.setEmail(cursor.getString(5));
             u.setUniversity(cursor.getString(6));
             u.setDepartment(cursor.getString(7));
-            u.setRequests(fetchStudyRequestsOfUser(u));
+            // u.setRequests(fetchStudyRequestsOfUser(u));
             cursor.close();
         } else {
             u = null;
@@ -218,7 +198,6 @@ public class StorageHandler extends SQLiteOpenHelper {
         return u;
     }
 
-    /* To be used for the authentication process */
     public User fetchUserByUsername(String username) {
         String query = "SELECT * FROM " + TABLE_USERS + " WHERE " +
                 COL_USERNAME + " = '" + username + "'";
@@ -236,7 +215,6 @@ public class StorageHandler extends SQLiteOpenHelper {
             u.setEmail(cursor.getString(5));
             u.setUniversity(cursor.getString(6));
             u.setDepartment(cursor.getString(7));
-            u.setRequests(fetchStudyRequestsOfUser(u));
             cursor.close();
         } else {
             u = null;
@@ -264,7 +242,6 @@ public class StorageHandler extends SQLiteOpenHelper {
             u.setEmail(cursor.getString(5));
             u.setUniversity(cursor.getString(6));
             u.setDepartment(cursor.getString(7));
-            u.setRequests(fetchStudyRequestsOfUser(u));
             cursor.close();
         } else {
             u = null;
@@ -274,22 +251,65 @@ public class StorageHandler extends SQLiteOpenHelper {
         return u;
     }
 
+    //endregion
 
-    public ArrayList<User> fetchAllUsers() {
-        String query = "SELECT " + COL_UID + " FROM " + TABLE_USERS;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query,null);
+    //region StudyRequest::data functionalities
+    @SuppressLint("SimpleDateFormat")
+    public void addStudyRequest(StudyRequest sr) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
 
-        ArrayList<User> users = new ArrayList<>();
-        try { while (cursor.moveToNext()) { users.add(fetchUserById(Integer.parseInt(cursor.getString(0)))); } }
-        finally { cursor.close(); }
+        values.put(COL_UID, sr.getRequestedUserId());
+        values.put(COL_SUBJECT, sr.getSubject());
+        values.put(COL_REASON, sr.getReason());
+        values.put(COL_PLACE, sr.getPlace());
+        values.put(COL_COMMENTS, sr.getComments());
+        values.put(COL_TIME, (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
+        values.put(COL_PERIOD, sr.getPeriod().getDisplayName());
+        values.put(COL_MAX, sr.getMaxMatches());
 
+        boolean flag = true;
+        for(String v : values.keySet()) { if (values.get(v) == null || (values.get(v).equals("") && !v.equals("comments") )) flag = false; }
+
+        if (flag) db.insert(TABLE_REQUESTS,null, values);
         db.close();
-        return users;
+
+        ArrayList<Integer> tmp = fetchStudyRequestsOfUser(sr.getRequestedUserId());
+        FindMatches(tmp.get(tmp.size() - 1));
     }
 
     @SuppressLint("SimpleDateFormat")
-    public StudyRequest fetchStudyRequestsById(int id) {
+    public void updateStudyRequest(long osrId, StudyRequest sr) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COL_SUBJECT, sr.getSubject());
+        values.put(COL_REASON, sr.getReason());
+        values.put(COL_PLACE, sr.getPlace());
+        values.put(COL_COMMENTS, sr.getComments());
+        values.put(COL_TIME, (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
+        values.put(COL_PERIOD, sr.getPeriod().getDisplayName());
+        values.put(COL_MAX, sr.getMaxMatches());
+
+        boolean flag = true;
+        for (String v : values.keySet()) {
+            if (values.get(v) == null || (values.get(v).equals("") && !v.equals(COL_COMMENTS)))
+                flag = false;
+        }
+
+        if (flag) db.update(TABLE_REQUESTS, values, COL_RID + " = ?", new String[]{String.valueOf(osrId)});
+        db.close();
+    }
+
+    public void deleteStudyRequest(long srId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_REQUESTS, COL_RID + "1" + " = ? OR " + COL_RID + "2" + " =? ",
+                new String[]{String.valueOf(srId)});
+        db.close();
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public StudyRequest fetchStudyRequestById(long id) {
         String query = "SELECT * FROM " + TABLE_REQUESTS + " WHERE " +
                 COL_RID + " = '" + id + "'";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -297,17 +317,15 @@ public class StorageHandler extends SQLiteOpenHelper {
         StudyRequest sr = new StudyRequest();
         try {
             if(cursor.moveToFirst()) {
-            cursor.moveToFirst();
             sr.setId(Integer.parseInt(cursor.getString(0)));
-            sr.setRequestedUser(fetchUserById(Integer.parseInt(cursor.getString(1))));
+            sr.setRequestedUserId(Integer.parseInt(cursor.getString(1)));
             sr.setSubject(cursor.getString(2));
             sr.setReason(cursor.getString(3));
             sr.setPlace(cursor.getString(4));
             sr.setComments(cursor.getString(5));
             sr.setDatetime((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).parse(cursor.getString(6)));
-            sr.setPeriod(PeriodOfStudy.valueOf(cursor.getString(7)));
+            sr.setPeriod(PeriodOfStudy.getPeriodOfStudy(cursor.getString(7)));
             sr.setMaxMatches(Integer.parseInt(cursor.getString(8)));
-            sr.setMatchedUsers(fetchMatchesOfStudyRequest(sr));
         } } catch (Exception ignored) { } finally { cursor.close(); }
 
         db.close();
@@ -315,46 +333,120 @@ public class StorageHandler extends SQLiteOpenHelper {
     }
 
     @SuppressLint("SimpleDateFormat")
-    public ArrayList<StudyRequest> fetchStudyRequestsOfUser(User user) {
-        String query = "SELECT * FROM " + TABLE_REQUESTS + " WHERE " +
-                COL_UID + " = '" + user.getId() + "'";
+    private ArrayList<Integer> fetchAllStudyRequests() {
+        String query = "SELECT " + COL_RID + " FROM " + TABLE_REQUESTS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query,null);
 
-        ArrayList<StudyRequest> srs = new ArrayList<>();
+        ArrayList<Integer> requestsIds = new ArrayList<>();
         try {
-            StudyRequest sr = new StudyRequest();
             while (cursor.moveToNext()) {
-                sr.setId(Integer.parseInt(cursor.getString(0)));
-                sr.setRequestedUser(user);
-                sr.setSubject(cursor.getString(2));
-                sr.setReason(cursor.getString(3));
-                sr.setPlace(cursor.getString(4));
-                sr.setComments(cursor.getString(5));
-                sr.setDatetime((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).parse(cursor.getString(6)));
-                sr.setPeriod(PeriodOfStudy.valueOf(cursor.getString(7)));
-                sr.setMaxMatches(Integer.parseInt(cursor.getString(8)));
-                sr.setMatchedUsers(fetchMatchesOfStudyRequest(sr));
-                srs.add(sr);
+                requestsIds.add(Integer.parseInt(cursor.getString(0)));
+//                StudyRequest sr = new StudyRequest();
+//                sr.setId(Integer.parseInt(cursor.getString(0)));
+//                sr.setRequestedUserId(Integer.parseInt(cursor.getString(1)));
+//                sr.setSubject(cursor.getString(2));
+//                sr.setReason(cursor.getString(3));
+//                sr.setPlace(cursor.getString(4));
+//                sr.setComments(cursor.getString(5));
+//                sr.setDatetime((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).parse(cursor.getString(6)));
+//                sr.setPeriod(PeriodOfStudy.getPeriodOfStudy(cursor.getString(7)));
+//                sr.setMaxMatches(Integer.parseInt(cursor.getString(8)));
+//                srs.add(sr);
             }
         } catch (Exception ignored) { } finally { cursor.close(); }
 
         db.close();
-        return srs;
+        return requestsIds;
     }
 
-    public ArrayList<User> fetchMatchesOfStudyRequest(StudyRequest studyRequest) {
-        String query = "SELECT " + COL_UID + " FROM " + TABLE_MATCHES + " WHERE " +
-                COL_RID + " = '" + studyRequest.getId() + "' AND " + COL_UID + " <> '" + studyRequest.getRequestedUser().getId() + "'";
+    @SuppressLint("SimpleDateFormat")
+    public ArrayList<Integer> fetchStudyRequestsOfUser(long uId) {
+        String query = "SELECT * FROM " + TABLE_REQUESTS + " WHERE " +
+                COL_UID + " = '" + uId + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query,null);
 
-        ArrayList<User> users = new ArrayList<>();
-        try { while (cursor.moveToNext()) { users.add(fetchUserById(Integer.parseInt(cursor.getString(0)))); } }
+        ArrayList<Integer> srs = new ArrayList<>();
+        try {
+            while (cursor.moveToNext()) {
+                srs.add(Integer.parseInt(cursor.getString(0)));
+//                StudyRequest sr = new StudyRequest();
+//                sr.setId(Integer.parseInt(cursor.getString(0)));
+//                sr.setRequestedUser(user);
+//                sr.setSubject(cursor.getString(2));
+//                sr.setReason(cursor.getString(3));
+//                sr.setPlace(cursor.getString(4));
+//                sr.setComments(cursor.getString(5));
+//                sr.setDatetime((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).parse(cursor.getString(6)));
+//                sr.setPeriod(PeriodOfStudy.getPeriodOfStudy(cursor.getString(7)));
+//                sr.setMaxMatches(Integer.parseInt(cursor.getString(8)));
+//                sr.setMatchedRequests(fetchMatchesOfStudyRequest(sr));
+//                srs.add(sr);
+            }
+        } catch (Exception ignored) { }
         finally { cursor.close(); }
 
         db.close();
-        return users;
+        return srs;
+    }
+    //endregion
+
+    //region Matches::data functionalities
+    public void addMatch(long srId1, long srId2) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COL_RID + "1", srId1);
+        values.put(COL_RID + "2", srId2);
+        db.insert(TABLE_MATCHES,null, values);
+        db.close();
     }
 
+    public ArrayList<Integer> fetchMatchesOfStudyRequest(long srId) {
+        String query = "SELECT DISTINCT " + COL_RID + "1" + " , " + COL_RID + "2" + " FROM " + TABLE_MATCHES + " WHERE " +
+                COL_RID + "1" + " = '" + srId + "' OR " + COL_RID + "2" + " = '" + srId + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
+
+        ArrayList<Integer> requestsIds = new ArrayList<>();
+
+        try {
+            while (cursor.moveToNext()) {
+                requestsIds.add(Integer.parseInt(cursor.getString(0)));
+                requestsIds.add(Integer.parseInt(cursor.getString(1)));
+            }
+        }
+        catch (Exception ignored) { }
+        finally { cursor.close(); }
+
+        db.close();
+        return requestsIds;
+    }
+
+    public boolean isStudyRequestMatched(long srId) {
+        return fetchMatchesOfStudyRequest(srId) != null && fetchMatchesOfStudyRequest(srId).size() > 0;
+    }
+
+    public boolean isStudyRequestFulfilled(long srId) {
+        return isStudyRequestMatched(srId) && fetchStudyRequestById(srId).getMaxMatches() <= fetchMatchesOfStudyRequest(srId).size();
+    }
+
+    private void FindMatches(long srId) {
+        StudyRequest s1 = fetchStudyRequestById(srId);
+
+        ArrayList<StudyRequest> allStudyRequests = new ArrayList<>();
+        for (Integer id : fetchAllStudyRequests()) {
+            allStudyRequests.add(fetchStudyRequestById(id));
+        }
+
+        for (StudyRequest s2 : allStudyRequests) {
+            if (s1.getRequestedUserId() != s2.getRequestedUserId()
+                    && StudyRequest.matchRequest(s1,s2) >= MatchesListActivity.SIMILARITY_THRESHOLD
+                    && !isStudyRequestFulfilled(s1.getId()) && !isStudyRequestMatched(s2.getId())) {
+                addMatch(s1.getId(),s2.getId());
+            }
+        }
+    }
+    //endregion
 }

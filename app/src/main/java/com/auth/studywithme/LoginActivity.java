@@ -13,8 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Date;
-
 public class LoginActivity extends AppCompatActivity {
     EditText usernameEditText;
     EditText passwordEditText;
@@ -32,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize StorageHandler
         storageHandler = new StorageHandler(this,null,1);
+
 
         TextView textView = findViewById(R.id.textViewSignUp);
         SpannableString spannableString = new SpannableString("Not a member? Sign up now");
@@ -63,13 +62,9 @@ public class LoginActivity extends AppCompatActivity {
             // Show a success message
             Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
 
-//            For debugging purpose
-//            StudyRequest sr = new StudyRequest("Algorithms", "Test", "Central Library","o", new Date(),PeriodOfStudy.once,4);
-//            storageHandler.addStudyRequest(sr,loggedUser);
-
             // Switch to the new activity for creating a study request
-            Intent intent = new Intent(LoginActivity.this, Dashboard.class);
-            intent.putExtra("loggedUser",loggedUser);
+            Intent intent = new Intent(this, DashboardActivity.class);
+            intent.putExtra("loggedUserId",loggedUser.getId());
             startActivity(intent);
             finish();
         } else {
