@@ -58,17 +58,6 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
             commentsEditText.setText(studyRequest.getComments());
             maxMatchesEditText.setText(Integer.toString(studyRequest.getMaxMatches()));
             periodSpinner.setSelection(adapter.getPosition(studyRequest.getPeriod().getDisplayName()));
-
-            if(studyRequest.isMatched()){
-                subjectEditText.setEnabled(false);
-                subjectEditText.setEnabled(false);
-                reasonEditText.setEnabled(false);
-                placeEditText.setEnabled(false);
-                maxMatchesEditText.setEnabled(false);
-                commentsEditText.setEnabled(false);
-                periodSpinner.setEnabled(false);
-            }
-
         } else {
             finish();
         }

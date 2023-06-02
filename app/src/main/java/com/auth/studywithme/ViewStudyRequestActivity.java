@@ -18,7 +18,7 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_study_request);
+        setContentView(R.layout.activity_view_study_request);
 
 
         Bundle extras = getIntent().getExtras();
@@ -33,23 +33,29 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
             Spinner periodSpinner = findViewById(R.id.spinner_period_of_study);
 
             // Set up period spinner
-            ArrayAdapter<PeriodOfStudy> periodAdapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_spinner_item, PeriodOfStudy.values());
-            periodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            periodSpinner.setAdapter(periodAdapter);
+            PeriodOfStudy[] periods = PeriodOfStudy.values();
+            String[] periodValues = new String[periods.length];
+            for (int i = 0; i < periods.length; i++)
+                periodValues[i] = periods[i].getDisplayName();
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,periodValues);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            periodSpinner.setAdapter(adapter);
 
             // Pre-fill the form fields with the current values of the study request
             subjectEditText.setText(studyRequest.getSubject());
             reasonEditText.setText(studyRequest.getReason());
             placeEditText.setText(studyRequest.getPlace());
             commentsEditText.setText(studyRequest.getComments());
-            periodSpinner.setSelection(periodAdapter.getPosition(studyRequest.getPeriod()));
+            periodSpinner.setSelection(adapter.getPosition(studyRequest.getPeriod().getDisplayName()));
 
-            subjectEditText.setEnabled(false);
-            reasonEditText.setEnabled(false);
-            placeEditText.setEnabled(false);
-            commentsEditText.setEnabled(false);
-            periodSpinner.setEnabled(false);
+            if(studyRequest.isMatched()){
+                subjectEditText.setEnabled(false);
+                reasonEditText.setEnabled(false);
+                placeEditText.setEnabled(false);
+                commentsEditText.setEnabled(false);
+                periodSpinner.setEnabled(false);
+            }
 
         } else {
             finish();
