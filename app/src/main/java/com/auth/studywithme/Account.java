@@ -2,15 +2,18 @@ package com.auth.studywithme;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,11 +27,12 @@ public abstract class Account extends AppCompatActivity {
     EditText usernameEditText;
     EditText passwordEditText;
     EditText emailEditText;
-    EditText universityEditText;
+    Spinner universitySpinner;
     EditText departmentEditText;
     StorageHandler storageHandler;
     Button signUpButton;
     StorageHandler sh;
+    ArrayAdapter<String> adapter;
     static int NUM_FLAGS = 3;
     boolean[] flags = new boolean[NUM_FLAGS];
 
@@ -48,7 +52,7 @@ public abstract class Account extends AppCompatActivity {
         usernameEditText = findViewById(R.id.usernameEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         emailEditText = findViewById(R.id.emailEditText);
-        universityEditText = findViewById(R.id.universityEditText);
+        universitySpinner = findViewById(R.id.uniSpinner);
         departmentEditText = findViewById(R.id.departmentEditText);
         signUpButton = findViewById(R.id.storeButton);
         signUpButton.setEnabled(false);
@@ -124,6 +128,26 @@ public abstract class Account extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
 
+        University[] unis = University.values();
+        String[] unisNames = new String[unis.length];
+        for (int i = 0; i < unis.length; i++)
+            unisNames[i] = University.getUniversityName(this,unis[i]);
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,unisNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        universitySpinner.setAdapter(adapter);
+
+        universitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) view).setTextColor(Color.BLACK);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
     // Stores or updates a user account in db
@@ -157,5 +181,4 @@ public abstract class Account extends AppCompatActivity {
         for(boolean b : flags) { if (!b) { f = false; break;} }
         findViewById(R.id.storeButton).setEnabled(f);
     }
-
 }

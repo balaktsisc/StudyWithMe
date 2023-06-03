@@ -54,6 +54,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         this.user = user;
         this.sr = null;
         this.studyRequests = new ArrayList<>();
+
         for (Integer srId : sh.fetchStudyRequestsOfUser(user.getId()))
             this.studyRequests.add(sh.fetchStudyRequestById(srId));
     }

@@ -3,6 +3,7 @@ package com.auth.studywithme;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,13 +40,13 @@ public class AccountActivity extends Account {
                 authorized = false;
             }
 
-            super.firstNameEditText.setText(loggedUser.getFirstName());
-            super.lastNameEditText.setText(loggedUser.getLastName());
-            super.usernameEditText.setText(loggedUser.getUsername());
-            super.passwordEditText.setText(loggedUser.getPassword());
-            super.emailEditText.setText(loggedUser.getEmail());
-            super.universityEditText.setText(loggedUser.getUniversity());
-            super.departmentEditText.setText((loggedUser.getDepartment()));
+            firstNameEditText.setText(loggedUser.getFirstName());
+            lastNameEditText.setText(loggedUser.getLastName());
+            usernameEditText.setText(loggedUser.getUsername());
+            passwordEditText.setText(loggedUser.getPassword());
+            emailEditText.setText(loggedUser.getEmail());
+            universitySpinner.setSelection(adapter.getPosition(University.getUniversityName(this,loggedUser.getUniversity())));
+            departmentEditText.setText((loggedUser.getDepartment()));
 
             if(authorized) {
                 title.setText("Account");
@@ -54,13 +55,13 @@ public class AccountActivity extends Account {
             } else {
                 title.setText("Study partner details");
                 firstNameEditText.setText(loggedUser.getName());
-                firstNameEditText.setEnabled(false);
+                firstNameEditText.setInputType(InputType.TYPE_NULL);
                 lastNameEditText.setVisibility(View.GONE);
                 usernameEditText.setVisibility(View.GONE);
                 passwordEditText.setVisibility(View.GONE);
-                emailEditText.setEnabled(false);
-                universityEditText.setEnabled(false);
-                departmentEditText.setEnabled(false);
+                emailEditText.setInputType(InputType.TYPE_NULL);
+                universitySpinner.setEnabled(false);
+                departmentEditText.setInputType(InputType.TYPE_NULL);
                 deleteButton.setVisibility(View.INVISIBLE);
                 storeButton.setVisibility(View.INVISIBLE);
             }
@@ -78,7 +79,7 @@ public class AccountActivity extends Account {
             u.setUsername(usernameEditText.getText().toString());
             u.setPassword(passwordEditText.getText().toString());
             u.setEmail(emailEditText.getText().toString());
-            u.setUniversity(universityEditText.getText().toString());
+            u.setUniversity(University.getUniversity(this,universitySpinner.getSelectedItem().toString()));
             u.setDepartment(departmentEditText.getText().toString());
 
             TryActivateStoreButton();

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -67,10 +68,10 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
             });
 
             if(sh.isStudyRequestMatched(studyRequest.getId())){
-                subjectEditText.setEnabled(false);
-                reasonEditText.setEnabled(false);
-                placeEditText.setEnabled(false);
-                commentsEditText.setEnabled(false);
+                subjectEditText.setInputType(InputType.TYPE_NULL);
+                reasonEditText.setInputType(InputType.TYPE_NULL);
+                placeEditText.setInputType(InputType.TYPE_NULL);
+                commentsEditText.setInputType(InputType.TYPE_NULL);
                 periodSpinner.setEnabled(false);
             }
 

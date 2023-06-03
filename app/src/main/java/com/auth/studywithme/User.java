@@ -7,12 +7,13 @@ public class User implements Serializable {
     private long id;
     private String username, email, password;
     private String firstName, lastName;
-    private String university, department;
+    private University university;
+    private String department;
 
     /* Constructors */
     public User() { }
 
-    public User(String username, String password, String email, String firstName, String lastName, String university, String department) {
+    public User(String username, String password, String email, String firstName, String lastName, University university, String department) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -31,8 +32,8 @@ public class User implements Serializable {
     public void setFirstName(String firstName) { this.firstName = firstName; }
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
-    public String getUniversity() { return university; }
-    public void setUniversity(String university) { this.university = university; }
+    public University getUniversity() { return university; }
+    public void setUniversity(University university) { this.university = university; }
     public String getDepartment() { return department; }
     public void setDepartment(String department) { this.department = department; }
     public String getEmail() { return email; }

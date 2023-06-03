@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 
 public class StorageHandler extends SQLiteOpenHelper {
+    private Context context;
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "StudyWithMe.db";
 
@@ -45,6 +46,7 @@ public class StorageHandler extends SQLiteOpenHelper {
     // Constructor
     public StorageHandler(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, version);
+        this.context = context;
         // Remove commenting for the following if the dbs' schema has changed. REMEMBER TO COMMENT IT OUT AGAIN!
 //        onUpgrade(this.getReadableDatabase(),1,1);
     }
@@ -110,7 +112,7 @@ public class StorageHandler extends SQLiteOpenHelper {
         values.put(COL_FIRSTNAME, u.getFirstName());
         values.put(COL_LASTNAME, u.getLastName());
         values.put(COL_EMAIL, u.getEmail());
-        values.put(COL_UNIVERSITY, u.getUniversity());
+        values.put(COL_UNIVERSITY, University.getUniversityName(context,u.getUniversity()));
         values.put(COL_DEPARTMENT, u.getDepartment());
 
         boolean flag = true;
@@ -134,7 +136,7 @@ public class StorageHandler extends SQLiteOpenHelper {
         values.put(COL_FIRSTNAME, nu.getFirstName());
         values.put(COL_LASTNAME, nu.getLastName());
         values.put(COL_EMAIL, nu.getEmail());
-        values.put(COL_UNIVERSITY, nu.getUniversity());
+        values.put(COL_UNIVERSITY, University.getUniversityName(context,nu.getUniversity()));
         values.put(COL_DEPARTMENT, nu.getDepartment());
 
         boolean flag = true;
@@ -186,9 +188,8 @@ public class StorageHandler extends SQLiteOpenHelper {
             u.setFirstName(cursor.getString(3));
             u.setLastName(cursor.getString(4));
             u.setEmail(cursor.getString(5));
-            u.setUniversity(cursor.getString(6));
+            u.setUniversity(University.getUniversity(context,cursor.getString(6)));
             u.setDepartment(cursor.getString(7));
-            // u.setRequests(fetchStudyRequestsOfUser(u));
             cursor.close();
         } else {
             u = null;
@@ -213,7 +214,7 @@ public class StorageHandler extends SQLiteOpenHelper {
             u.setFirstName(cursor.getString(3));
             u.setLastName(cursor.getString(4));
             u.setEmail(cursor.getString(5));
-            u.setUniversity(cursor.getString(6));
+            u.setUniversity(University.getUniversity(context,cursor.getString(6)));
             u.setDepartment(cursor.getString(7));
             cursor.close();
         } else {
@@ -240,7 +241,7 @@ public class StorageHandler extends SQLiteOpenHelper {
             u.setFirstName(cursor.getString(3));
             u.setLastName(cursor.getString(4));
             u.setEmail(cursor.getString(5));
-            u.setUniversity(cursor.getString(6));
+            u.setUniversity(University.getUniversity(context,cursor.getString(6)));
             u.setDepartment(cursor.getString(7));
             cursor.close();
         } else {
@@ -299,7 +300,7 @@ public class StorageHandler extends SQLiteOpenHelper {
 
         if (flag) db.update(TABLE_REQUESTS, values, COL_RID + " = ?", new String[]{String.valueOf(osrId)});
         db.close();
-        
+
         FindMatches(osrId);
     }
 
@@ -346,17 +347,6 @@ public class StorageHandler extends SQLiteOpenHelper {
         try {
             while (cursor.moveToNext()) {
                 requestsIds.add(Integer.parseInt(cursor.getString(0)));
-//                StudyRequest sr = new StudyRequest();
-//                sr.setId(Integer.parseInt(cursor.getString(0)));
-//                sr.setRequestedUserId(Integer.parseInt(cursor.getString(1)));
-//                sr.setSubject(cursor.getString(2));
-//                sr.setReason(cursor.getString(3));
-//                sr.setPlace(cursor.getString(4));
-//                sr.setComments(cursor.getString(5));
-//                sr.setDatetime((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).parse(cursor.getString(6)));
-//                sr.setPeriod(PeriodOfStudy.getPeriodOfStudy(cursor.getString(7)));
-//                sr.setMaxMatches(Integer.parseInt(cursor.getString(8)));
-//                srs.add(sr);
             }
         } catch (Exception ignored) { } finally { cursor.close(); }
 
