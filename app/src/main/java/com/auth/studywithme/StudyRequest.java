@@ -1,15 +1,14 @@
 package com.auth.studywithme;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
 public class StudyRequest  implements Serializable {
     private long id;
-    private String subject, reason, place, comments;
-//    private ArrayList<Integer> matchedRequests;
+    private String subject, place, comments;
+    private ReasonOfStudy reason;
     private long requestedUserId;
     private Date datetime;
     private PeriodOfStudy period;
@@ -18,36 +17,27 @@ public class StudyRequest  implements Serializable {
     /* Constructors */
     public StudyRequest() { }
 
-    public StudyRequest(String subject, String reason, String place, String comments, Date datetime, PeriodOfStudy period, int maxMatches) {
+    public StudyRequest(String subject, ReasonOfStudy reason, String place, String comments, Date datetime, PeriodOfStudy period, int maxMatches) {
         this.subject = subject;
         this.reason = reason;
         this.place = place;
         this.comments = comments;
-//        this.matchedRequests = new ArrayList<>();
         this.datetime = datetime;
         this.period = period;
         this.maxMatches = maxMatches;
     }
 
-//    public boolean isMatched() {
-//        return matchedRequests == null || matchedRequests.size() > 0;
-//    }
-
-//    public boolean isFulfilled() { return matchedRequests.size() >= maxMatches; }
-
     /* Setters and Getters */
     public String getSubject() { return subject; }
     public void setSubject(String subject) { this.subject = subject; }
-    public String getReason() { return reason; }
-    public void setReason(String reason) { this.reason = reason; }
+    public ReasonOfStudy getReason() { return reason; }
+    public void setReason(ReasonOfStudy reason) { this.reason = reason; }
     public String getPlace() { return place; }
     public void setPlace(String place) { this.place = place; }
     public String getComments() { return comments; }
     public void setComments(String comments) { this.comments = comments; }
     public long getRequestedUserId() { return requestedUserId; }
     public void setRequestedUserId(long requestedUserId) { this.requestedUserId = requestedUserId; }
-//    public ArrayList<Integer> getMatchedRequests() { return matchedRequests; }
-//    public void setMatchedRequests(ArrayList<Integer> matchedRequests) { this.matchedRequests = matchedRequests; }
     public Date getDatetime() { return datetime; }
     public void setDatetime(Date datetime) { this.datetime = datetime; }
     public PeriodOfStudy getPeriod() { return period; }

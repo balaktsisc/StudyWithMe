@@ -35,7 +35,7 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
 
             // Initialize views
             EditText subjectEditText = findViewById(R.id.et_subject);
-            EditText reasonEditText = findViewById(R.id.et_reason);
+            Spinner reasonSpinner = findViewById(R.id.sp_reason);
             EditText placeEditText = findViewById(R.id.et_place);
             EditText commentsEditText = findViewById(R.id.et_comments);
             Spinner periodSpinner = findViewById(R.id.sp_period);
@@ -50,11 +50,34 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             periodSpinner.setAdapter(adapter);
 
+            ReasonOfStudy[] reasons = ReasonOfStudy.values();
+            String[] reasonsNames = new String[reasons.length];
+            for (int i = 0; i < reasons.length; i++)
+                reasonsNames[i] = ReasonOfStudy.getReasonName(this,reasons[i]);
+
+            ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,reasonsNames);
+            adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            reasonSpinner.setAdapter(adapter1);
+
+
             // Pre-fill the form fields with the current values of the study request
             subjectEditText.setText(studyRequest.getSubject());
-            reasonEditText.setText(studyRequest.getReason());
             placeEditText.setText(studyRequest.getPlace());
             commentsEditText.setText(studyRequest.getComments());
+
+
+            reasonSpinner.setSelection(adapter1.getPosition(ReasonOfStudy.getReasonName(this,studyRequest.getReason())));
+            reasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ((TextView) view).setTextColor(Color.BLACK);
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
             periodSpinner.setSelection(adapter.getPosition(studyRequest.getPeriod().getDisplayName()));
             periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -69,7 +92,7 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
 
             if(sh.isStudyRequestMatched(studyRequest.getId())){
                 subjectEditText.setInputType(InputType.TYPE_NULL);
-                reasonEditText.setInputType(InputType.TYPE_NULL);
+                reasonSpinner.setEnabled(false);
                 placeEditText.setInputType(InputType.TYPE_NULL);
                 commentsEditText.setInputType(InputType.TYPE_NULL);
                 periodSpinner.setEnabled(false);

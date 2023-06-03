@@ -48,4 +48,8 @@
     <string name="auth">Aristotle University of Thessaloniki</string>
     <string name="ihu">International Hellenic University</string>
     <string name="uom">University of Macedonia</string>
+    <string name="test">Test</string>
+    <string name="project">Project</string>
+    <string name="exam">Exam</string>
+    <string name="regular">Regular</string>
 </resources>

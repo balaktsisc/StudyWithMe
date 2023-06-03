@@ -2,6 +2,7 @@ package com.auth.studywithme;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.Date;
 
@@ -18,13 +20,13 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
     User loggedUser;
     StorageHandler storageHandler;
     EditText subjectEditText;
-    EditText reasonEditText;
+    Spinner reasonSpinner;
     EditText placeEditText;
     EditText commentsEditText;
     EditText maxMatchesEditText;
     PeriodOfStudy selectedPeriod;
     Button createBtn;
-   static int NUM_FLAGS = 4;
+   static int NUM_FLAGS = 3;
     boolean[] flags = new boolean[NUM_FLAGS];
 
     @Override
@@ -59,26 +61,34 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
 
-        reasonEditText = findViewById(R.id.et_reason);
-        reasonEditText.addTextChangedListener(new TextWatcher() {
+        reasonSpinner = findViewById(R.id.sp_reason);
+
+        ReasonOfStudy[] reasons = ReasonOfStudy.values();
+        String[] reasonsNames = new String[reasons.length];
+        for (int i = 0; i < reasons.length; i++)
+            reasonsNames[i] = ReasonOfStudy.getReasonName(this,reasons[i]);
+
+
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,reasonsNames);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        reasonSpinner.setAdapter(adapter1);
+        reasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void afterTextChanged(Editable s) {
-                if (reasonEditText.hasFocus()) {
-                    flags[1] = s.length() > 0;
-                    TryActivateCreateButton();
-                }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) view).setTextColor(Color.BLACK);
             }
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
+
         placeEditText = findViewById(R.id.et_place);
         placeEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 if (placeEditText.hasFocus()) {
-                    flags[2] = s.length() > 0;
+                    flags[1] = s.length() > 0;
                     TryActivateCreateButton();
                 }
             }
@@ -93,11 +103,11 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (maxMatchesEditText.hasFocus()) {
-                    flags[3] = s.length() > 0;
+                    flags[2] = s.length() > 0;
                     TryActivateCreateButton();
                 } else if (maxMatchesEditText.getText().toString().equals("")) {
                     maxMatchesEditText.setText("1");
-                    flags[3] = true;
+                    flags[2] = true;
                     TryActivateCreateButton();
                 }
             }
@@ -106,22 +116,19 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
-        flags[3] = true;
+        flags[2] = true;
         TryActivateCreateButton();
 
 
         Spinner periodSpinner = findViewById(R.id.sp_period);
-        // Define the string array for the spinner values
-
-
         PeriodOfStudy[] periods = PeriodOfStudy.values();
         String[] periodValues = new String[periods.length];
         for (int i = 0; i < periods.length; i++)
             periodValues[i] = periods[i].getDisplayName();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,periodValues);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        periodSpinner.setAdapter(adapter);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,periodValues);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        periodSpinner.setAdapter(adapter2);
 
         // Set listener so the spinner can listen for the selected item
         periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -138,14 +145,12 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
                 selectedPeriod = null;
             }
         });
-
-
     }
 
     public void createRequest(View view) {
         // Get form values
         String subject = subjectEditText.getText().toString();
-        String reason = reasonEditText.getText().toString();
+        ReasonOfStudy reason = ReasonOfStudy.getReason(this,reasonSpinner.getSelectedItem().toString());
         String place = placeEditText.getText().toString();
         String comments = commentsEditText.getText().toString();
         String maxMatches = maxMatchesEditText.getText().toString();
