@@ -90,7 +90,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             holder.card.setCardBackgroundColor(Color.parseColor("#ececec"));
 
         holder.subject.setText(sr.getSubject());
-        holder.reason.setText(sr.getReason());
+        holder.reason.setText(ReasonOfStudy.getReasonName(context,sr.getReason()));
         holder.date.setText((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
     }
 

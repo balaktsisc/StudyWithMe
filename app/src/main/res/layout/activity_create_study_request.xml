@@ -36,21 +36,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_new_study_request" />
 
-    <EditText
-        android:id="@+id/et_reason"
+    <Spinner
+        android:id="@+id/sp_reason"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:autofillHints=""
-        android:hint="@string/reason"
-        android:inputType="text"
-        android:maxLines="1"
+        android:contentDescription="@string/reason"
         android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/et_place"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_subject" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_reason"
+        app:layout_constraintTop_toBottomOf="@+id/et_subject"
+        app:layout_constraintVertical_bias="0.5" />
 
     <EditText
         android:id="@+id/et_place"
@@ -66,7 +66,7 @@
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_reason" />
+        app:layout_constraintTop_toBottomOf="@id/sp_reason" />
 
     <EditText
         android:id="@+id/et_comments"
@@ -108,7 +108,6 @@
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/times_for_study"
         android:prompt="@string/select_period"
-        android:spinnerMode="dialog"
         app:layout_constraintBottom_toBottomOf="@+id/tv_spinner_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -120,11 +119,12 @@
         android:id="@+id/tv_spinner_hint"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="14dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="@string/period_of_study"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:labelFor="@id/sp_period"
         app:layout_constraintEnd_toStartOf="@+id/sp_period"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -140,5 +140,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sp_period" />
+
+    <TextView
+        android:id="@+id/tv_reason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:text="@string/reason"
+        android:textSize="18sp"
+        android:labelFor="@id/sp_reason"
+        app:layout_constraintBottom_toTopOf="@+id/et_place"
+        app:layout_constraintEnd_toStartOf="@+id/sp_reason"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_subject"
+        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

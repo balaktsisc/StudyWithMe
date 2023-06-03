@@ -160,19 +160,6 @@ public class StorageHandler extends SQLiteOpenHelper {
         return result > 0;
     }
 
-    public ArrayList<User> fetchAllUsers() {
-        String query = "SELECT " + COL_UID + " FROM " + TABLE_USERS;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query,null);
-
-        ArrayList<User> users = new ArrayList<>();
-        try { while (cursor.moveToNext()) { users.add(fetchUserById(Integer.parseInt(cursor.getString(0)))); } }
-        finally { cursor.close(); }
-
-        db.close();
-        return users;
-    }
-
     public User fetchUserById(long id) {
         String query = "SELECT * FROM " + TABLE_USERS + " WHERE " +
                 COL_UID + " = '" + id + "'";
@@ -262,7 +249,7 @@ public class StorageHandler extends SQLiteOpenHelper {
 
         values.put(COL_UID, sr.getRequestedUserId());
         values.put(COL_SUBJECT, sr.getSubject());
-        values.put(COL_REASON, sr.getReason());
+        values.put(COL_REASON, ReasonOfStudy.getReasonName(context,sr.getReason()));
         values.put(COL_PLACE, sr.getPlace());
         values.put(COL_COMMENTS, sr.getComments());
         values.put(COL_TIME, (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
@@ -285,7 +272,7 @@ public class StorageHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(COL_SUBJECT, sr.getSubject());
-        values.put(COL_REASON, sr.getReason());
+        values.put(COL_REASON, ReasonOfStudy.getReasonName(context,sr.getReason()));
         values.put(COL_PLACE, sr.getPlace());
         values.put(COL_COMMENTS, sr.getComments());
         values.put(COL_TIME, (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
@@ -325,7 +312,7 @@ public class StorageHandler extends SQLiteOpenHelper {
             sr.setId(Integer.parseInt(cursor.getString(0)));
             sr.setRequestedUserId(Integer.parseInt(cursor.getString(1)));
             sr.setSubject(cursor.getString(2));
-            sr.setReason(cursor.getString(3));
+            sr.setReason(ReasonOfStudy.getReason(context,cursor.getString(3)));
             sr.setPlace(cursor.getString(4));
             sr.setComments(cursor.getString(5));
             sr.setDatetime((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).parse(cursor.getString(6)));

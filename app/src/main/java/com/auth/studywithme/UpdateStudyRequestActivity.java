@@ -17,7 +17,7 @@ import java.util.Date;
 public class UpdateStudyRequestActivity extends AppCompatActivity {
     StudyRequest studyRequest;
     EditText subjectEditText;
-    EditText reasonEditText;
+    Spinner reasonSpinner;
     EditText placeEditText;
     EditText commentsEditText;
     EditText maxMatchesEditText;
@@ -25,7 +25,7 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
     StorageHandler sh;
     Button updateBtn;
 
-    static int NUM_FLAGS = 4;
+    static int NUM_FLAGS = 3;
     boolean[] flags = new boolean[NUM_FLAGS];
     @SuppressLint("SetTextI18n")
     @Override
@@ -59,26 +59,13 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
                 public void onTextChanged(CharSequence s, int start, int before, int count) { }
             });
 
-            reasonEditText = findViewById(R.id.et_reason);
-            reasonEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (reasonEditText.hasFocus()) {
-                        flags[1] = s.length() > 0;
-                        TryActivateUpdateButton();
-                    }
-                }
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            });
+
             placeEditText = findViewById(R.id.et_place);
             placeEditText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (placeEditText.hasFocus()) {
-                        flags[2] = s.length() > 0;
+                        flags[1] = s.length() > 0;
                         TryActivateUpdateButton();
                     }
                 }
@@ -93,11 +80,11 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (maxMatchesEditText.hasFocus()) {
-                        flags[3] = s.length() > 0;
+                        flags[2] = s.length() > 0;
                         TryActivateUpdateButton();
                     } else if (maxMatchesEditText.getText().toString().equals("")) {
                         maxMatchesEditText.setText("1");
-                        flags[3] = true;
+                        flags[2] = true;
                         TryActivateUpdateButton();
                     }
                 }
@@ -107,10 +94,7 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
                 public void onTextChanged(CharSequence s, int start, int before, int count) { }
             });
 
-
             periodSpinner = findViewById(R.id.sp_period);
-
-
             // Set up period spinner
             PeriodOfStudy[] periods = PeriodOfStudy.values();
             String[] periodValues = new String[periods.length];
@@ -121,9 +105,22 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             periodSpinner.setAdapter(adapter);
 
+            reasonSpinner = findViewById(R.id.sp_reason);
+            ReasonOfStudy[] reasons = ReasonOfStudy.values();
+            String[] reasonsNames = new String[reasons.length];
+            for (int i = 0; i < reasons.length; i++)
+                reasonsNames[i] = ReasonOfStudy.getReasonName(this,reasons[i]);
+
+            ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,reasonsNames);
+            adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            reasonSpinner.setAdapter(adapter1);
+
+
+
+
             // Pre-fill the form fields with the current values of the study request
             subjectEditText.setText(studyRequest.getSubject());
-            reasonEditText.setText(studyRequest.getReason());
+            reasonSpinner.setSelection(adapter1.getPosition(ReasonOfStudy.getReasonName(this,studyRequest.getReason())));
             placeEditText.setText(studyRequest.getPlace());
             commentsEditText.setText(studyRequest.getComments());
             maxMatchesEditText.setText(Integer.toString(studyRequest.getMaxMatches()));
@@ -143,7 +140,7 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
 
         // Retrieve the updated values from the form fields
         String updatedSubject = subjectEditText.getText().toString();
-        String updatedReason = reasonEditText.getText().toString();
+        ReasonOfStudy updatedReason = ReasonOfStudy.getReason(this,reasonSpinner.getSelectedItem().toString());
         String updatedPlace = placeEditText.getText().toString();
         String updatedComments = commentsEditText.getText().toString();
         String updatedMaxMatches = maxMatchesEditText.getText().toString();
