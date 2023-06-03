@@ -45,4 +45,7 @@
     <string name="version">Version</string>
     <string name="versionDetailsFull">V.1.0 - Beta\n\nThis is a prototype version (proof of concept) of StudyWithMe.\nThe original application will use a remote-server authentication and DBMS.</string>
     <string name="logo_of_studywithme">Logo of StudyWithMe</string>
+    <string name="auth">Aristotle University of Thessaloniki</string>
+    <string name="ihu">International Hellenic University</string>
+    <string name="uom">University of Macedonia</string>
 </resources>

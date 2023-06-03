@@ -34,7 +34,7 @@ public class SignUpActivity extends Account {
         String username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         String email = emailEditText.getText().toString();
-        String university = universityEditText.getText().toString();
+        University university = University.getUniversity(this,universitySpinner.getSelectedItem().toString());
         String department = departmentEditText.getText().toString();
 
         // Create a new user object with the form input data
