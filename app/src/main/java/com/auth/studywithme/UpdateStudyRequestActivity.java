@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 public class UpdateStudyRequestActivity extends AppCompatActivity {
@@ -21,7 +23,10 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
     EditText maxMatchesEditText;
     Spinner periodSpinner;
     StorageHandler sh;
+    Button updateBtn;
 
+    static int NUM_FLAGS = 4;
+    boolean[] flags = new boolean[NUM_FLAGS];
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +39,75 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         if (extras != null) {
             studyRequest = sh.fetchStudyRequestById(extras.getLong("studyRequestId"));
 
+            for (int i = 0; i < NUM_FLAGS; i++) flags[i] = true;
+
             // Initialize views
+            updateBtn = findViewById(R.id.btn_update);
+
             subjectEditText = findViewById(R.id.et_subject);
+            subjectEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (subjectEditText.hasFocus()) {
+                        flags[0] = s.length() > 0;
+                        TryActivateUpdateButton();
+                    }
+                }
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            });
+
             reasonEditText = findViewById(R.id.et_reason);
+            reasonEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (reasonEditText.hasFocus()) {
+                        flags[1] = s.length() > 0;
+                        TryActivateUpdateButton();
+                    }
+                }
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            });
             placeEditText = findViewById(R.id.et_place);
+            placeEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (placeEditText.hasFocus()) {
+                        flags[2] = s.length() > 0;
+                        TryActivateUpdateButton();
+                    }
+                }
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            });
             commentsEditText = findViewById(R.id.et_comments);
-            maxMatchesEditText = findViewById((R.id.et_max_matches));
+            maxMatchesEditText = findViewById(R.id.et_max_matches);
+            maxMatchesEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (maxMatchesEditText.hasFocus()) {
+                        flags[3] = s.length() > 0;
+                        TryActivateUpdateButton();
+                    } else if (maxMatchesEditText.getText().toString().equals("")) {
+                        maxMatchesEditText.setText("1");
+                        flags[3] = true;
+                        TryActivateUpdateButton();
+                    }
+                }
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            });
+
+
             periodSpinner = findViewById(R.id.sp_period);
 
 
@@ -79,6 +147,7 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         String updatedPlace = placeEditText.getText().toString();
         String updatedComments = commentsEditText.getText().toString();
         String updatedMaxMatches = maxMatchesEditText.getText().toString();
+        if (updatedMaxMatches.equals("")) updatedMaxMatches = "1";
         PeriodOfStudy updatedPeriod = PeriodOfStudy.getPeriodOfStudy((String) periodSpinner.getSelectedItem());
 
         // Update the study request object with the new values
@@ -99,7 +168,6 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         finish();
     }
 
-
     public void deleteStudyRequest(View view) {
         // Delete the study request from the database
         sh.deleteStudyRequest(studyRequest.getId());
@@ -109,5 +177,10 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         finish();
     }
 
+    void TryActivateUpdateButton() {
+        boolean f = true;
+        for(boolean b : flags) { if (!b) { f = false; break;} }
+        findViewById(R.id.btn_update).setEnabled(f);
+    }
 
 }

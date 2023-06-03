@@ -21,6 +21,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     User user;
     ArrayList<StudyRequest> studyRequests;
     StorageHandler sh;
+    StudyRequest sr;
     ISStudyRequestRecycler srListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -51,6 +52,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         this.srListener = srListener;
         this.context = context;
         this.user = user;
+        this.sr = null;
         this.studyRequests = new ArrayList<>();
         for (Integer srId : sh.fetchStudyRequestsOfUser(user.getId()))
             this.studyRequests.add(sh.fetchStudyRequestById(srId));
@@ -58,6 +60,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     public RecyclerAdapter(Context context, StudyRequest sr, ISStudyRequestRecycler srListener, StorageHandler sh) {
         this.sh = sh;
+        this.sr = sr;
         this.srListener = srListener;
         this.context = context;
         this.user = sh.fetchUserById(sr.getRequestedUserId());
@@ -81,6 +84,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         if(sh.isStudyRequestMatched(sr.getId()))
             holder.card.setCardBackgroundColor(Color.parseColor("#d4ffb2"));
+
+        if(this.sr != null && this.sr.getRequestedUserId() == sr.getRequestedUserId())
+            holder.card.setCardBackgroundColor(Color.parseColor("#ececec"));
 
         holder.subject.setText(sr.getSubject());
         holder.reason.setText(sr.getReason());

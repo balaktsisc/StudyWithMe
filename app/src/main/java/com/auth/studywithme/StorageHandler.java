@@ -303,7 +303,9 @@ public class StorageHandler extends SQLiteOpenHelper {
 
     public void deleteStudyRequest(long srId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_REQUESTS, COL_RID + "1" + " = ? OR " + COL_RID + "2" + " =? ",
+        db.delete(TABLE_REQUESTS, COL_RID + " = ?",
+                new String[]{String.valueOf(srId)});
+        db.delete(TABLE_MATCHES, COL_RID + "1" + " = ? OR " + COL_RID + "2" + " =? ",
                 new String[]{String.valueOf(srId)});
         db.close();
     }
@@ -371,18 +373,6 @@ public class StorageHandler extends SQLiteOpenHelper {
         try {
             while (cursor.moveToNext()) {
                 srs.add(Integer.parseInt(cursor.getString(0)));
-//                StudyRequest sr = new StudyRequest();
-//                sr.setId(Integer.parseInt(cursor.getString(0)));
-//                sr.setRequestedUser(user);
-//                sr.setSubject(cursor.getString(2));
-//                sr.setReason(cursor.getString(3));
-//                sr.setPlace(cursor.getString(4));
-//                sr.setComments(cursor.getString(5));
-//                sr.setDatetime((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).parse(cursor.getString(6)));
-//                sr.setPeriod(PeriodOfStudy.getPeriodOfStudy(cursor.getString(7)));
-//                sr.setMaxMatches(Integer.parseInt(cursor.getString(8)));
-//                sr.setMatchedRequests(fetchMatchesOfStudyRequest(sr));
-//                srs.add(sr);
             }
         } catch (Exception ignored) { }
         finally { cursor.close(); }
