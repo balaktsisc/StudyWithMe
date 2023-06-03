@@ -299,6 +299,8 @@ public class StorageHandler extends SQLiteOpenHelper {
 
         if (flag) db.update(TABLE_REQUESTS, values, COL_RID + " = ?", new String[]{String.valueOf(osrId)});
         db.close();
+        
+        FindMatches(osrId);
     }
 
     public void deleteStudyRequest(long srId) {
