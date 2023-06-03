@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -55,64 +56,74 @@ public abstract class Account extends AppCompatActivity {
         storageHandler = new StorageHandler(this,null,1);
 
         // Check if inserted account details are suitable
-        try (StorageHandler storageHandler = new StorageHandler(this, null, 1)) {
-            usernameEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (usernameEditText.hasFocus()) {
-                        if (s.length() >= 2 && storageHandler.fetchUserByUsername(s.toString()) != null) {
-                            Toast.makeText(Account.this, "Username already exists!", Toast.LENGTH_SHORT).show();
-                            flags[0] = false;
-                        } else if (usernameEditText.length() >= 4) {
-                            Toast.makeText(Account.this, "Username available!", Toast.LENGTH_SHORT).show();
-                            flags[0] = true;
-                        } else {
-                            Toast.makeText(Account.this, "Username should be longer than 3 characters!", Toast.LENGTH_SHORT).show();
-                            flags[0] = false;
-                        }
-                        TryActivateStoreButton();
+        usernameEditText.addTextChangedListener(new TextWatcher() {
+            private final Handler handler = new Handler();
+            private Runnable runnable;
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (usernameEditText.hasFocus()) {
+                    if (s.length() >= 2 && storageHandler.fetchUserByUsername(s.toString()) != null) {
+                        runnable = () -> showToast("Username already exists!");
+                        handler.postDelayed(runnable, 800);
+                        flags[0] = false;
+                    } else if (usernameEditText.length() >= 4) {
+                        runnable = () -> showToast("Username available!");
+                        handler.postDelayed(runnable, 800);
+                        flags[0] = true;
+                    } else {
+                        runnable = () -> showToast("Username should be longer than 3 characters!");
+                        handler.postDelayed(runnable, 800);
+                        flags[0] = false;
                     }
+                    TryActivateStoreButton();
                 }
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            });
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (runnable != null) handler.removeCallbacks(runnable);
+            }
+        });
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            private final Handler handler = new Handler();
+            private Runnable runnable;
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(passwordEditText.hasFocus()) {
+                    if (isValid(s.toString())) {
+                        runnable = () -> showToast("Password looks nice!");
+                        handler.postDelayed(runnable, 800);
+                        flags[1] = true;
+                    } else {
+                        runnable = () -> showToast("Password must contain digits & letters between 5 to 20.");
+                        handler.postDelayed(runnable, 800);
+                        flags[1] = false;
+                    }
+                    TryActivateStoreButton();
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { /*signUpButton.setActivated(false);*/ }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (runnable != null) handler.removeCallbacks(runnable);
+            }
+        });
+        emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (emailEditText.hasFocus()) {
+                    flags[2] = s.toString().contains("@") && s.toString().contains(".");
+                    TryActivateStoreButton();
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        });
 
-            passwordEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if(passwordEditText.hasFocus()) {
-                        if (isValid(s.toString())) {
-                            Toast.makeText(Account.this, "Password looks nice!", Toast.LENGTH_SHORT).show();
-                            flags[1] = true;
-                        } else {
-                            Toast.makeText(Account.this, "Password must contain digits & letters between 5 to 20.", Toast.LENGTH_SHORT).show();
-                            flags[1] = false;
-                        }
-                        TryActivateStoreButton();
-                    }
-                }
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { signUpButton.setActivated(false); }
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            });
-
-            emailEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (emailEditText.hasFocus()) {
-                        flags[2] = s.toString().contains("@") && s.toString().contains(".");
-                        TryActivateStoreButton();
-                    }
-                }
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            });
-        }
     }
 
     // Stores or updates a user account in db
@@ -121,17 +132,17 @@ public abstract class Account extends AppCompatActivity {
     // Deletes an existing user account from db
     public void deleteAccount(View view){
         String username = usernameEditText.getText().toString();
-
-        try (StorageHandler storageHandler = new StorageHandler(this, null, 1)) {
-            if (storageHandler.deleteUser(username)) {
-                Toast.makeText(this, "Account deleted successfully!", Toast.LENGTH_SHORT).show();
-                setResult(101);
-                finish();
-            } else {
-                Toast.makeText(this, "Account failed to be deleted", Toast.LENGTH_SHORT).show();
-            }
+        if (storageHandler.deleteUser(username)) {
+            Toast.makeText(this, "Account deleted successfully!", Toast.LENGTH_SHORT).show();
+            setResult(101);
+            finish();
+        } else {
+            Toast.makeText(this, "Account failed to be deleted", Toast.LENGTH_SHORT).show();
         }
+    }
 
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-zA-Z]).{4,20}$";
