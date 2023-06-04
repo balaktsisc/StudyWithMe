@@ -54,33 +54,36 @@
         android:id="@+id/textViewSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="@string/not_a_member_sign_up_now"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.919" />
+        app:layout_constraintTop_toBottomOf="@+id/editTxtPassword"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
         android:onClick="LoginClicked"
         android:text="@string/login"
+        app:layout_constraintBottom_toTopOf="@+id/textViewSignUp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTxtPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTxtPassword"
+        app:layout_constraintVertical_bias="0.07999998" />
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="99dp"
-        android:layout_height="91dp"
-        android:layout_marginTop="64dp"
+        android:layout_width="wrap_content"
+        android:layout_height="105dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/logo_of_studywithme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo"
-        android:contentDescription="@string/logo_of_studywithme" />
+        app:srcCompat="@drawable/logo" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -43,6 +45,7 @@ public abstract class Account extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         sh = new StorageHandler(this,null,1);
@@ -59,6 +62,7 @@ public abstract class Account extends AppCompatActivity {
         departmentEditText = findViewById(R.id.departmentEditText);
         signUpButton = findViewById(R.id.storeButton);
         signUpButton.setEnabled(false);
+
 
         storageHandler = new StorageHandler(this,null,1);
 
@@ -140,17 +144,35 @@ public abstract class Account extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         universitySpinner.setAdapter(adapter);
 
+        if (savedInstanceState != null) {
+            //Retrieve data from the Bundle (other methods include getInt(), getBoolean() etc)
+            CharSequence uni = savedInstanceState.getCharSequence("uni");
+            //Restore the dynamic state of the UI
+            universitySpinner.setSelection(adapter.getPosition(uni.toString()));
+        }
+        else{
+            //Initialize the UI
+            universitySpinner.setSelection(0);
+        }
+
         universitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) view).setTextColor(Color.BLACK);
+                if (view != null) ((TextView) view).setTextColor(Color.BLACK);
             }
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save data to the Bundle (other methods include putInt(), putBoolean() etc)
+        CharSequence uni = universitySpinner.getSelectedItem().toString();
+        outState.putCharSequence("uni", uni);
     }
 
     @Override

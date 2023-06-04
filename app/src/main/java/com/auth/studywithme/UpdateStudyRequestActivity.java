@@ -1,6 +1,8 @@
 package com.auth.studywithme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -34,7 +36,7 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_study_request);
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         sh = new StorageHandler(this,null,1);
@@ -120,8 +122,6 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
             reasonSpinner.setAdapter(adapter1);
 
 
-
-
             // Pre-fill the form fields with the current values of the study request
             subjectEditText.setText(studyRequest.getSubject());
             reasonSpinner.setSelection(adapter1.getPosition(ReasonOfStudy.getReasonName(this,studyRequest.getReason())));
@@ -129,9 +129,34 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
             commentsEditText.setText(studyRequest.getComments());
             maxMatchesEditText.setText(Integer.toString(studyRequest.getMaxMatches()));
             periodSpinner.setSelection(adapter.getPosition(studyRequest.getPeriod().getDisplayName()));
+
+            if (savedInstanceState != null){
+                //Retrieve data from the Bundle (other methods include getInt(), getBoolean() etc)
+                CharSequence period = savedInstanceState.getCharSequence("period");
+                CharSequence reason = savedInstanceState.getCharSequence("reason");
+                //Restore the dynamic state of the UI
+                periodSpinner.setSelection(adapter.getPosition(period.toString()));
+                reasonSpinner.setSelection(adapter1.getPosition(reason.toString()));
+            }
+            else{
+                //Initialize the UI
+                periodSpinner.setSelection(0);
+                reasonSpinner.setSelection(0);
+            }
         } else {
             finish();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save data to the Bundle (other methods include putInt(), putBoolean() etc)
+        CharSequence period = periodSpinner.getSelectedItem().toString();
+        outState.putCharSequence("period", period);
+        CharSequence reason = reasonSpinner.getSelectedItem().toString();
+        outState.putCharSequence("reason", reason);
     }
 
     @Override

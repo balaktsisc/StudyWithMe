@@ -14,7 +14,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.Objects;
 
@@ -22,13 +24,15 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
     StudyRequest studyRequest;
     StorageHandler sh;
     User user;
+    Spinner periodSpinner;
+    Spinner reasonSpinner;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_study_request);
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         sh = new StorageHandler(this,null,1);
@@ -40,10 +44,10 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
 
             // Initialize views
             EditText subjectEditText = findViewById(R.id.et_subject);
-            Spinner reasonSpinner = findViewById(R.id.sp_reason);
+            reasonSpinner = findViewById(R.id.sp_reason);
             EditText placeEditText = findViewById(R.id.et_place);
             EditText commentsEditText = findViewById(R.id.et_comments);
-            Spinner periodSpinner = findViewById(R.id.sp_period);
+            periodSpinner = findViewById(R.id.sp_period);
 
             // Set up period spinner
             PeriodOfStudy[] periods = PeriodOfStudy.values();
@@ -69,13 +73,25 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
             subjectEditText.setText(studyRequest.getSubject());
             placeEditText.setText(studyRequest.getPlace());
             commentsEditText.setText(studyRequest.getComments());
-
+            if (savedInstanceState != null){
+                //Retrieve data from the Bundle (other methods include getInt(), getBoolean() etc)
+                CharSequence period = savedInstanceState.getCharSequence("period");
+                CharSequence reason = savedInstanceState.getCharSequence("reason");
+                //Restore the dynamic state of the UI
+                periodSpinner.setSelection(adapter.getPosition(period.toString()));
+                reasonSpinner.setSelection(adapter1.getPosition(reason.toString()));
+            }
+            else{
+                //Initialize the UI
+                periodSpinner.setSelection(0);
+                reasonSpinner.setSelection(0);
+            }
 
             reasonSpinner.setSelection(adapter1.getPosition(ReasonOfStudy.getReasonName(this,studyRequest.getReason())));
             reasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    ((TextView) view).setTextColor(Color.BLACK);
+                    if(view != null) ((TextView) view).setTextColor(Color.BLACK);
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
@@ -87,7 +103,7 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
             periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    ((TextView) view).setTextColor(Color.BLACK);
+                    if(view != null) ((TextView) view).setTextColor(Color.BLACK);
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
@@ -113,6 +129,17 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
         } else {
             finish();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save data to the Bundle (other methods include putInt(), putBoolean() etc)
+        CharSequence period = periodSpinner.getSelectedItem().toString();
+        outState.putCharSequence("period", period);
+        CharSequence reason = reasonSpinner.getSelectedItem().toString();
+        outState.putCharSequence("reason", reason);
     }
 
     @Override

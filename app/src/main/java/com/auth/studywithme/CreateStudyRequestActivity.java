@@ -1,6 +1,8 @@
 package com.auth.studywithme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
     EditText commentsEditText;
     EditText maxMatchesEditText;
     PeriodOfStudy selectedPeriod;
+    Spinner periodSpinner;
     Button createBtn;
    static int NUM_FLAGS = 3;
     boolean[] flags = new boolean[NUM_FLAGS];
@@ -36,6 +39,7 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_study_request);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         // Initialize StorageHandler
@@ -76,16 +80,6 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,reasonsNames);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         reasonSpinner.setAdapter(adapter1);
-        reasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) view).setTextColor(Color.BLACK);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         placeEditText = findViewById(R.id.et_place);
         placeEditText.addTextChangedListener(new TextWatcher() {
@@ -124,7 +118,7 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
         TryActivateCreateButton();
 
 
-        Spinner periodSpinner = findViewById(R.id.sp_period);
+        periodSpinner = findViewById(R.id.sp_period);
         PeriodOfStudy[] periods = PeriodOfStudy.values();
         String[] periodValues = new String[periods.length];
         for (int i = 0; i < periods.length; i++)
@@ -149,6 +143,31 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
                 selectedPeriod = null;
             }
         });
+
+        if (savedInstanceState != null){
+            //Retrieve data from the Bundle (other methods include getInt(), getBoolean() etc)
+            CharSequence period = savedInstanceState.getCharSequence("period");
+            CharSequence reason = savedInstanceState.getCharSequence("reason");
+            //Restore the dynamic state of the UI
+            periodSpinner.setSelection(adapter2.getPosition(period.toString()));
+            reasonSpinner.setSelection(adapter1.getPosition(reason.toString()));
+        }
+        else{
+            //Initialize the UI
+            periodSpinner.setSelection(0);
+            reasonSpinner.setSelection(0);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save data to the Bundle (other methods include putInt(), putBoolean() etc)
+        CharSequence period = periodSpinner.getSelectedItem().toString();
+        outState.putCharSequence("period", period);
+        CharSequence reason = reasonSpinner.getSelectedItem().toString();
+        outState.putCharSequence("reason", reason);
     }
 
     @Override

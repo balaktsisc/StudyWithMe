@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import java.util.Objects;
 
 public class SignUpActivity extends Account {
@@ -17,7 +19,7 @@ public class SignUpActivity extends Account {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         storeButton = findViewById(R.id.storeButton);
