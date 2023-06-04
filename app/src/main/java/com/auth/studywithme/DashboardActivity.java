@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -36,6 +38,10 @@ public class DashboardActivity extends AppCompatActivity implements RecyclerAdap
             loggedUser = sh.fetchUserById(extras.getLong("loggedUserId"));
         else
             finish();
+
+        TextView emptyDashboardTV = findViewById(R.id.emptyDashboardTV);
+        if (sh.fetchStudyRequestsOfUser(loggedUser.getId()).size() > 0)
+            emptyDashboardTV.setVisibility(View.GONE);
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -74,6 +80,7 @@ public class DashboardActivity extends AppCompatActivity implements RecyclerAdap
             return true;
         } else if (item.getItemId() == R.id.menu_logout) {
             Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
 

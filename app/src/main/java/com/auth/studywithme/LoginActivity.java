@@ -72,14 +72,22 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(this, DashboardActivity.class);
             intent.putExtra("loggedUserId",loggedUser.getId());
             startActivity(intent);
-            finish();
+//            finish();
         } else {
             // Show an error message
             Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
         }
     }
 
-        // Check if the username and password are valid
+    @Override
+    public void onResume() {
+        super.onResume();
+        usernameEditText = findViewById(R.id.editTxtUsername);
+        passwordEditText = findViewById(R.id.editTxtPassword);
+        passwordEditText.setText("");
+    }
+
+    // Check if the username and password are valid
     private User authenticateUser(String username, String password){
         // Search database for user with specified username and password
         return storageHandler.fetchUserByCredentials(username, password);

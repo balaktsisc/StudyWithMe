@@ -53,4 +53,6 @@
     <string name="exam">Exam</string>
     <string name="regular">Regular</string>
     <string name="log_out">Log out</string>
+    <string name="try_creating_a_study_request_by_tapping_on">Try creating a Study Request by tapping on (+)</string>
+    <string name="try_creating_a_new_study_request_by_tapping_on">Try creating a new study request by tapping on (+) !</string>
 </resources>
