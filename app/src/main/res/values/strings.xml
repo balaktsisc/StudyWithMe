@@ -52,4 +52,5 @@
     <string name="project">Project</string>
     <string name="exam">Exam</string>
     <string name="regular">Regular</string>
+    <string name="log_out">Log out</string>
 </resources>
