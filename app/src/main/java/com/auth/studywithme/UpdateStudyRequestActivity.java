@@ -18,6 +18,9 @@ import android.widget.Spinner;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Activity for updating a study request.
+ */
 public class UpdateStudyRequestActivity extends AppCompatActivity {
     StudyRequest studyRequest;
     EditText subjectEditText;
@@ -31,6 +34,11 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
 
     static int NUM_FLAGS = 3;
     boolean[] flags = new boolean[NUM_FLAGS];
+    /**
+     * Called when the activity is created.
+     *
+     * @param savedInstanceState The saved instance state bundle.
+     */
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,6 +176,11 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Updates the study request with the new values from the form fields.
+     *
+     * @param view The clicked view.
+     */
     public void updateStudyRequest(View view) {
         StudyRequest s = new StudyRequest();
 
@@ -203,6 +216,11 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Deletes the study request from the database.
+     *
+     * @param view The clicked view.
+     */
     public void deleteStudyRequest(View view) {
         // Delete the study request from the database
         sh.deleteStudyRequest(studyRequest.getId());
@@ -212,6 +230,9 @@ public class UpdateStudyRequestActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Tries to activate the update button based on the form field flags.
+     */
     void TryActivateUpdateButton() {
         boolean f = true;
         for(boolean b : flags) { if (!b) { f = false; break;} }
