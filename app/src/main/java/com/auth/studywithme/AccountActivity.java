@@ -9,6 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Activity for managing user account information and actions.
+ * This class extends the abstract class Account, which provides common functionality.
+ */
 public class AccountActivity extends Account {
     TextView title;
     Button storeButton;
@@ -33,6 +37,7 @@ public class AccountActivity extends Account {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            // Retrieve the logged-in user from the database
             loggedUser = super.sh.fetchUserById(extras.getLong("loggedUserId"));
 
             if(loggedUser == null) {
@@ -40,6 +45,7 @@ public class AccountActivity extends Account {
                 authorized = false;
             }
 
+            // Set the EditText fields with user's information
             firstNameEditText.setText(loggedUser.getFirstName());
             lastNameEditText.setText(loggedUser.getLastName());
             usernameEditText.setText(loggedUser.getUsername());
@@ -49,10 +55,12 @@ public class AccountActivity extends Account {
             departmentEditText.setText((loggedUser.getDepartment()));
 
             if(authorized) {
+                // The logged-in user is authorized to edit the account
                 title.setText("Account");
                 for (int i = 0; i < NUM_FLAGS; i++) super.flags[i] = true;
                 TryActivateStoreButton();
             } else {
+                // Displaying details of a study partner, not authorized to edit
                 title.setText("Study partner details");
                 firstNameEditText.setText(loggedUser.getName());
                 firstNameEditText.setInputType(InputType.TYPE_NULL);
@@ -66,6 +74,7 @@ public class AccountActivity extends Account {
                 storeButton.setVisibility(View.INVISIBLE);
             }
         } else {
+            // No user information provided, finish the activity
             finish();
         }
     }
@@ -73,6 +82,7 @@ public class AccountActivity extends Account {
     @Override
     public void storeAccount(View view) {
         if (authorized) {
+            // Update the account with the modified user information
             User u = new User();
             u.setFirstName(firstNameEditText.getText().toString());
             u.setLastName(lastNameEditText.getText().toString());
