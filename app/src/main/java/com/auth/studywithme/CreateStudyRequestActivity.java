@@ -20,6 +20,10 @@ import android.widget.TextView;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Activity for creating a study request.
+ * Allows the user to enter details such as subject, reason, place, comments, and maximum matches for the study request.
+ */
 public class CreateStudyRequestActivity extends AppCompatActivity {
     User loggedUser;
     StorageHandler storageHandler;
@@ -39,13 +43,14 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_study_request);
 
+        // Set the app's default night mode to NO night mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         // Initialize StorageHandler
         storageHandler = new StorageHandler(this,null,1);
 
-
+        // Retrieve the logged-in user from the extras
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             loggedUser = storageHandler.fetchUserById(extras.getLong("loggedUserId"));
@@ -69,6 +74,7 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
 
+        // Initialize the reasonSpinner
         reasonSpinner = findViewById(R.id.sp_reason);
 
         ReasonOfStudy[] reasons = ReasonOfStudy.values();
@@ -179,6 +185,12 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Creates a study request based on the entered details and adds it to the database.
+     * Called when the "Create Request" button is clicked.
+     *
+     * @param view The button view that was clicked
+     */
     public void createRequest(View view) {
         // Get form values
         String subject = subjectEditText.getText().toString();
@@ -188,15 +200,21 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
         String maxMatches = maxMatchesEditText.getText().toString();
         if (maxMatches.equals("")) maxMatches = "1";
 
-        // Create new Study Request object and add it to the database
+        // Create a new StudyRequest object with the entered details
         StudyRequest sr = new StudyRequest(subject, reason, place,comments, new Date(),selectedPeriod,Integer.parseInt(maxMatches));
         sr.setRequestedUserId(loggedUser.getId());
+
+        // Add the study request to the database
         storageHandler.addStudyRequest(sr);
 
         setResult(100);
         finish();
     }
 
+    /**
+     * Checks if all required fields are filled to enable the "Create Request" button.
+     * Activates the button if all fields are filled, otherwise deactivates it.
+     */
     void TryActivateCreateButton() {
         boolean f = true;
         for(boolean b : flags) { if (!b) { f = false; break;} }
