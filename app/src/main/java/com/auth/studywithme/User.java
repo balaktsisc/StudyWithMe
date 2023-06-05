@@ -3,6 +3,9 @@ package com.auth.studywithme;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Represents a user in the application.
+ */
 public class User implements Serializable {
     private long id;
     private String username, email, password;
@@ -11,8 +14,23 @@ public class User implements Serializable {
     private String department;
 
     /* Constructors */
+
+    /**
+     * Default constructor for the User class.
+     */
     public User() { }
 
+    /**
+     * Parameterized constructor for the User class.
+     *
+     * @param username   The username of the user.
+     * @param password   The password of the user.
+     * @param email      The email of the user.
+     * @param firstName  The first name of the user.
+     * @param lastName   The last name of the user.
+     * @param university The university of the user.
+     * @param department The department of the user.
+     */
     public User(String username, String password, String email, String firstName, String lastName, University university, String department) {
         this.username = username;
         this.password = password;

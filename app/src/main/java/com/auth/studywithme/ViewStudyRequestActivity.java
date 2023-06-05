@@ -20,6 +20,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.Objects;
 
+/**
+ * Activity for viewing a study request.
+ */
 public class ViewStudyRequestActivity extends AppCompatActivity {
     StudyRequest studyRequest;
     StorageHandler sh;
