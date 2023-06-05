@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-
+/**
+ * The RecyclerAdapter class is responsible for binding StudyRequest data to RecyclerView items.
+ */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
     Context context;
     User user;
@@ -24,6 +26,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     StudyRequest sr;
     ISStudyRequestRecycler srListener;
 
+    /**
+     * ViewHolder class holds the views for a single RecyclerView item.
+     */
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView subject;
         TextView reason;
@@ -47,6 +52,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         }
     }
 
+    /**
+     * Constructs a RecyclerAdapter for displaying study requests of a user.
+     *
+     * @param context the context of the adapter
+     * @param user the user for whom the study requests are displayed
+     * @param srListener the listener for study request item clicks
+     * @param sh the storage handler for data retrieval
+     */
     public RecyclerAdapter(Context context, User user, ISStudyRequestRecycler srListener, StorageHandler sh) {
         this.sh = sh;
         this.srListener = srListener;
@@ -59,6 +72,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             this.studyRequests.add(sh.fetchStudyRequestById(srId));
     }
 
+    /**
+     * Constructs a RecyclerAdapter for displaying study request matches.
+     *
+     * @param context the context of the adapter
+     * @param sr the study request for which matches are displayed
+     * @param srListener the listener for study request item clicks
+     * @param sh the storage handler for data retrieval
+     */
     public RecyclerAdapter(Context context, StudyRequest sr, ISStudyRequestRecycler srListener, StorageHandler sh) {
         this.sh = sh;
         this.sr = sr;
@@ -83,21 +104,31 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(@NonNull RecyclerAdapter.ViewHolder holder, int position) {
         StudyRequest sr = studyRequests.get(position);
 
-        if(sh.isStudyRequestMatched(sr.getId()))
+        if (sh.isStudyRequestMatched(sr.getId()))
             holder.card.setCardBackgroundColor(Color.parseColor("#d4ffb2"));
 
-        if(this.sr != null && this.sr.getRequestedUserId() == sr.getRequestedUserId())
+        if (this.sr != null && this.sr.getRequestedUserId() == sr.getRequestedUserId())
             holder.card.setCardBackgroundColor(Color.parseColor("#ececec"));
 
         holder.subject.setText(sr.getSubject());
-        holder.reason.setText(ReasonOfStudy.getReasonName(context,sr.getReason()));
+        holder.reason.setText(ReasonOfStudy.getReasonName(context, sr.getReason()));
         holder.date.setText((new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(sr.getDatetime()));
     }
 
     @Override
-    public int getItemCount() { return this.studyRequests.size(); }
+    public int getItemCount() {
+        return this.studyRequests.size();
+    }
 
+    /**
+     * The ISStudyRequestRecycler interface provides a callback for study request item clicks.
+     */
     interface ISStudyRequestRecycler {
+        /**
+         * Called when a study request item is clicked.
+         *
+         * @param srId the ID of the clicked study request
+         */
         void showStudyRequestDetails(long srId);
     }
 

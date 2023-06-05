@@ -4,9 +4,22 @@ import android.content.Context;
 
 import java.io.Serializable;
 
+/**
+ * The ReasonOfStudy enumeration represents the different reasons for studying in a study request.
+ */
 public enum ReasonOfStudy implements Serializable {
-    TEST, EXAM, REGULAR, PROJECT;
+    TEST,
+    EXAM,
+    REGULAR,
+    PROJECT;
 
+    /**
+     * Returns the localized name of the reason of study based on the current context.
+     *
+     * @param context the context used for retrieving the localized string
+     * @param r the reason of study
+     * @return the localized name of the reason of study
+     */
     public static String getReasonName(Context context, ReasonOfStudy r) {
         switch (r) {
             case TEST:
@@ -22,8 +35,15 @@ public enum ReasonOfStudy implements Serializable {
         }
     }
 
+    /**
+     * Returns the ReasonOfStudy enum constant based on the localized reason string.
+     *
+     * @param context the context used for retrieving the localized string
+     * @param r the localized reason string
+     * @return the ReasonOfStudy enum constant, or null if no match is found
+     */
     public static ReasonOfStudy getReason(Context context, String r) {
-        if(r.equals(context.getString(R.string.test)))
+        if (r.equals(context.getString(R.string.test)))
             return ReasonOfStudy.TEST;
         else if (r.equals(context.getString(R.string.exam)))
             return ReasonOfStudy.EXAM;

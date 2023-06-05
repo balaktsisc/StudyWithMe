@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.Objects;
 
+/**
+ * The SignUpActivity class handles the sign-up process for creating a new user account.
+ */
 public class SignUpActivity extends Account {
     TextView title;
     Button storeButton;
@@ -28,6 +31,11 @@ public class SignUpActivity extends Account {
         title.setText("Sign up");
     }
 
+    /**
+     * Stores the new user account in the database.
+     *
+     * @param view the view that triggers the method
+     */
     @Override
     public void storeAccount(View view){
         // Get text form inputs
