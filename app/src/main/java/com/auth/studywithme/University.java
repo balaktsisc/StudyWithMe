@@ -7,6 +7,13 @@ import java.io.Serializable;
 public enum University implements Serializable {
     AUTH, IHU, UOM;
 
+    /**
+     * Retrieves the name of the university based on the enum value.
+     *
+     * @param context the context of the application
+     * @param uni     the university enum value
+     * @return the name of the university
+     */
     public static String getUniversityName(Context context, University uni) {
         switch (uni) {
             case AUTH:
@@ -20,8 +27,15 @@ public enum University implements Serializable {
         }
     }
 
+    /**
+     * Retrieves the university enum value based on the university name.
+     *
+     * @param context   the context of the application
+     * @param uniName   the name of the university
+     * @return the university enum value, or null if the name is not recognized
+     */
     public static University getUniversity(Context context, String uniName) {
-        if(uniName.equals(context.getString(R.string.auth)))
+        if (uniName.equals(context.getString(R.string.auth)))
             return University.AUTH;
         else if (uniName.equals(context.getString(R.string.ihu)))
             return University.IHU;
