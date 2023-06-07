@@ -35,8 +35,8 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
     PeriodOfStudy selectedPeriod;
     Spinner periodSpinner;
     Button createBtn;
-   static int NUM_FLAGS = 3;
-    boolean[] flags = new boolean[NUM_FLAGS];
+    static int NUM_FLAGS = 3;
+    boolean[] flags = new boolean[NUM_FLAGS];   // Helper flags to determine the correctness of the user input
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +74,12 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
 
-        // Initialize the reasonSpinner
+        // Initialize the reasonSpinner and append selections (values)
         reasonSpinner = findViewById(R.id.sp_reason);
-
         ReasonOfStudy[] reasons = ReasonOfStudy.values();
         String[] reasonsNames = new String[reasons.length];
         for (int i = 0; i < reasons.length; i++)
             reasonsNames[i] = ReasonOfStudy.getReasonName(this,reasons[i]);
-
 
         ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,reasonsNames);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -120,10 +118,12 @@ public class CreateStudyRequestActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
+        
+        // if maxMatches is not filled, consider default; 1
         flags[2] = true;
         TryActivateCreateButton();
 
-
+        // Initialize the periodSpinner and append selections (values)
         periodSpinner = findViewById(R.id.sp_period);
         PeriodOfStudy[] periods = PeriodOfStudy.values();
         String[] periodValues = new String[periods.length];

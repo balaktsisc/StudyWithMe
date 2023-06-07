@@ -5,6 +5,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import java.util.Objects;
 
+/**
+ * Represts the About Activity that displays user and technincal
+ * info about the application. Its usage is considered static.
+ */
+
 public class AboutActivity extends AppCompatActivity {
 
     @Override

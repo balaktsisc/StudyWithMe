@@ -52,7 +52,7 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
             EditText commentsEditText = findViewById(R.id.et_comments);
             periodSpinner = findViewById(R.id.sp_period);
 
-            // Set up period spinner
+            // Initialize the periodSpinner and append selections (values)
             PeriodOfStudy[] periods = PeriodOfStudy.values();
             String[] periodValues = new String[periods.length];
             for (int i = 0; i < periods.length; i++)
@@ -62,6 +62,7 @@ public class ViewStudyRequestActivity extends AppCompatActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             periodSpinner.setAdapter(adapter);
 
+            // Initialize the reasonSpinner and append selections (values)
             ReasonOfStudy[] reasons = ReasonOfStudy.values();
             String[] reasonsNames = new String[reasons.length];
             for (int i = 0; i < reasons.length; i++)

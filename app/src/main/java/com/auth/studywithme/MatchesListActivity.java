@@ -19,7 +19,7 @@ import java.util.Objects;
  * It allows the user to view the details of each match and navigate back to the previous activity.
  */
 public class MatchesListActivity extends AppCompatActivity implements RecyclerAdapter.ISStudyRequestRecycler {
-    public static double SIMILARITY_THRESHOLD = 0.6;
+    public static double SIMILARITY_THRESHOLD = 0.6;        // The threshold over which two requests are considered similar enough to match
     RecyclerView recyclerView;
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder> adapter;
     StudyRequest sr;

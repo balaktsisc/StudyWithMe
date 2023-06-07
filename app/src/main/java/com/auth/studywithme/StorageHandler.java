@@ -10,7 +10,10 @@ import android.database.Cursor;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-
+/**
+ * The StorageHandler class represents a DB handler that implements
+ * the CRUD functionalities affecting the tables and their records.
+ */
 public class StorageHandler extends SQLiteOpenHelper {
     private Context context;
     private static final int DATABASE_VERSION = 1;
@@ -47,8 +50,6 @@ public class StorageHandler extends SQLiteOpenHelper {
     public StorageHandler(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, version);
         this.context = context;
-        // Remove commenting for the following if the dbs' schema has changed. REMEMBER TO COMMENT IT OUT AGAIN!
-//        onUpgrade(this.getReadableDatabase(),1,1);
     }
 
     //region Initialization::db

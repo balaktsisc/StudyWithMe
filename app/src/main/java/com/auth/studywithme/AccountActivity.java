@@ -40,6 +40,10 @@ public class AccountActivity extends Account {
             // Retrieve the logged-in user from the database
             loggedUser = super.sh.fetchUserById(extras.getLong("loggedUserId"));
 
+            // If the activity isn't launched by Dashboard Activity, that means
+            // that the user requests to see the user details of another user,
+            // so the user corresponding to the pre-filled fields is not authorized
+            // to view all the details, neither edit any of them.
             if(loggedUser == null) {
                 loggedUser = super.sh.fetchUserById(extras.getLong("userId"));
                 authorized = false;

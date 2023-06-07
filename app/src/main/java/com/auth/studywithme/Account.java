@@ -25,6 +25,14 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+/**
+ * This abstract class represents the Account Activity, containing
+ * EditText objects and user input fields that are related to a User
+ * object (a.r.a. account). This class is inherited by other activities
+ * that use the same or less views, enabling or disabling, showing or
+ * pre-completing fields.
+ */
 public abstract class Account extends AppCompatActivity {
     EditText firstNameEditText;
     EditText lastNameEditText;
@@ -38,7 +46,7 @@ public abstract class Account extends AppCompatActivity {
     StorageHandler sh;
     ArrayAdapter<String> adapter;
     static int NUM_FLAGS = 3;
-    boolean[] flags = new boolean[NUM_FLAGS];
+    boolean[] flags = new boolean[NUM_FLAGS];   // Helper flags to determine the correctness of the user input
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -63,10 +71,12 @@ public abstract class Account extends AppCompatActivity {
         signUpButton = findViewById(R.id.storeButton);
         signUpButton.setEnabled(false);
 
-
+        // Connect to the database
         storageHandler = new StorageHandler(this,null,1);
 
-        // Check if inserted account details are suitable
+
+        // Check if inserted account details are suitable and inform the user
+
         usernameEditText.addTextChangedListener(new TextWatcher() {
             private final Handler handler = new Handler();
             private Runnable runnable;
@@ -135,6 +145,7 @@ public abstract class Account extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
 
+        // Append values to the university spinner
         University[] unis = University.values();
         String[] unisNames = new String[unis.length];
         for (int i = 0; i < unis.length; i++)
@@ -184,7 +195,7 @@ public abstract class Account extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Stores or updates a user account in db
+    // Stores or updates a user account in db with details from the user input fields
     public abstract void storeAccount(View view);
 
     // Deletes an existing user account from db
@@ -205,11 +216,16 @@ public abstract class Account extends AppCompatActivity {
 
     static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-zA-Z]).{4,20}$";
     static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+
     static boolean isValid(final String password) {
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
     }
 
+    /**
+     * Checks if all required fields are filled to enable the "Store" button.
+     * Activates the button if all fields are filled, otherwise deactivates it.
+     */
     void TryActivateStoreButton() {
         boolean f = true;
         for(boolean b : flags) { if (!b) { f = false; break;} }

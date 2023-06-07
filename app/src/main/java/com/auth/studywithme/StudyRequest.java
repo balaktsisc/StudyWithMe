@@ -5,6 +5,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * The StudyRequest class represents a StudyRequest; an request posted by users
+ * that contains information about a subject to study, a place, a reason, a frequency
+ * and the maximun number of people they want to study with.
+ */
 public class StudyRequest implements Serializable {
     private long id;
     private String subject, place, comments;

@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Represents a user in the application.
+ * Represents a user in the application; it's comprised of specific
+ * personal details, such as first/last names, username and email,
+ * and academic details, such as university and depertment they study at.
  */
 public class User implements Serializable {
     private long id;
