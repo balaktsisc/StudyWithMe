@@ -158,6 +158,11 @@ public class StorageHandler extends SQLiteOpenHelper {
         long result = db.delete(TABLE_USERS, COL_UID + " = ?",
                 new String[]{String.valueOf(u.getId())});
         db.close();
+
+        if (result > 0)
+           for(Integer i : fetchStudyRequestsOfUser(u.getId()))
+               deleteStudyRequest(i);
+
         return result > 0;
     }
 
