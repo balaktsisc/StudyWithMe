@@ -2,6 +2,7 @@ package com.auth.studywithme;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -203,6 +204,9 @@ public abstract class Account extends AppCompatActivity {
         String username = usernameEditText.getText().toString();
         if (storageHandler.deleteUser(username)) {
             Toast.makeText(this, "Account deleted successfully!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this,LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             setResult(101);
             finish();
         } else {
