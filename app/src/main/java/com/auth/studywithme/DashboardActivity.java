@@ -121,7 +121,6 @@ public class DashboardActivity extends AppCompatActivity implements RecyclerAdap
             result -> {
                 if (result.getResultCode() == DELETED_ACCOUNT) {
                     // If the account was deleted, start LoginActivity and finish this activity
-//                    startActivity(new Intent(this,LoginActivity.class));
                     finish();
                 } else if (result.getResultCode() == CREATED_REQUEST || result.getResultCode() == UPDATED_REQUEST ||
                         result.getResultCode() == DELETED_REQUEST) {
